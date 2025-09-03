@@ -17,9 +17,9 @@ int compararSemestres(void *a, void *b){
   ea = a;
   eb = b;
   if( ea->semestres < eb->semestres )
-    return 1;
-  else if ( ea->semestres > eb->semestres)
     return -1;
+  else if ( ea->semestres > eb->semestres)
+    return 1;
   else
     return 0;	
 }
@@ -47,9 +47,9 @@ int compararPromedio(void *a, void *b){
   ea = a;
   eb = b;
   if( ea->promedio < eb->promedio )
-    return 1;
-  else if ( ea->promedio > eb->promedio)
     return -1;
+  else if ( ea->promedio > eb->promedio)
+    return 1;
   else
     return 0;	
 }
