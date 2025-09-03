@@ -62,3 +62,36 @@ int inputCadena(char *mensaje,char *cadena,int longitud)
 	resultado = (res) ? 1:0;
 	return resultado;	
 }
+
+int inputCadenaDinamica(char *mensaje, char **cadena, int max){
+  int res;
+  if(*cadena)
+    free(*cadena);
+  *cadena = malloc(sizeof(char) * max + 1);
+  if(!cadena)
+    return 0;
+  res = inputCadena(mensaje, *cadena, max);
+  if(!res)
+    free(*cadena);
+  else{
+    char *aux = NULL;
+    int size;
+    size = strlen(*cadena) + 1;
+    while(!aux)
+      aux = realloc(*cadena, sizeof(char)*size);
+    *cadena = aux;
+  }
+  return res;
+}
+
+char* cadenaDinamica(const char* cadena){
+  char *dinamica = NULL;
+  int size;
+  size = strlen(cadena)+1;
+  while(!dinamica)
+    dinamica = malloc(sizeof(char)*size);
+  strcpy(dinamica,cadena);
+  return dinamica;
+}
+
+
