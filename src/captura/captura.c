@@ -1,6 +1,5 @@
 #include "captura.h"
 
-
 void clear_buffer(void)
 {
 	char c;

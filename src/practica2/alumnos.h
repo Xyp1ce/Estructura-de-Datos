@@ -1,5 +1,12 @@
 #ifndef ALUMNOS_H
 #define ALUMNOS_H
+
+#include "../Estructuras/listadoble/listadoble.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "../captura/captura.h"
+
 typedef struct {
   unsigned int matricula;
   char nombre[64];
@@ -7,7 +14,7 @@ typedef struct {
   float promedio;
 }Alumno;
 
-Alumno *llenarInfo(Lista l);
+Alumno *llenarInfo(ListaD l);
 void* crearAlumno(Alumno a);
 
 int compararSemestres(void *a, void *b);

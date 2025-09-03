@@ -3,17 +3,23 @@
 
 #include "nododoble.h"
 
-typedef struct 
-{
-	NodoD *inicio;
-	NodoD *fin;
-	int cant;
-	int (*comparar)(void *datoA,void *dataB);
-	void (*imprimir)(void *datoA);
-	// void (*liberar)(void *datoA);
-}ListaD;
+typedef struct lista_doble {
+    NodoD *inicio;
+    NodoD *fin;
+    int cant;
+    int (*comparar)(void *datoA, void *dataB);
+    void (*imprimir)(void *datoA);
+} ListaD;
 
 ListaD inicializarListaD(void);
 void mostrarListaD(ListaD lista, int opc);
+void borrarLista(ListaD *lista);
+void* buscarDato(ListaD lista, void *dato, int (*comparar)(void*, void*));
+void insertarOrdenado(ListaD *lista, void* dato);
+void insertarFinal(ListaD *lista, void* dato);
+void insertarInicio(ListaD *lista, void* dato);
+void insertarEnPosicion(ListaD *lista, void* dato, int pos);
+void eliminarEnPosicion(ListaD *lista, int pos);
+void reordenar(ListaD *listaOrigen, int (*comparar)(void*, void*));
 
 #endif
