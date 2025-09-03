@@ -4,7 +4,7 @@
 
 int main(void){
   ListaD lista;
-  Alumno *buscarAlumno;
+  Alumno buscarAlumno;
   Alumno *alumno;
   int opc;
   lista = inicializarListaD();
@@ -59,12 +59,11 @@ int main(void){
         printf("[1] Nombre   [3] Matricula\n");
         printf("[2] Promedio [4] Semestres\n");
         inputEntero("Ingrese una opcion>> ", &opc);
-        clear_buffer();
         switch(opc){
           case 1:
             inputCadena("Ingresa el nombre>> ", buscarAlumno->nombre, 255);
             remover_salto(buscarAlumno->nombre);
-            alumno = buscarDato(lista, &buscarAlumno, &compararNombre);
+            alumno = buscarDato(lista, buscarAlumno, &compararNombre);
             if(alumno != NULL){
               printf("Se ha encontrado un alumno>>\n");
               imprimirNombre(alumno);
@@ -78,7 +77,7 @@ int main(void){
           case 2:
             inputFloat("Ingrese el promedio del alumno>> ", &buscarAlumno->promedio);
             clear_buffer();
-            alumno = buscarDato(lista, &buscarAlumno, &compararPromedio);
+            alumno = buscarDato(lista, buscarAlumno, &compararPromedio);
             if(alumno != NULL){
               printf("Se ha encontrado un alumno>>\n");
               imprimirNombre(alumno);
@@ -93,7 +92,7 @@ int main(void){
             printf("Ingrese la matricula del alumno>> ");
             scanf("%u", &buscarAlumno->matricula);
             clear_buffer();
-            alumno = buscarDato(lista, &buscarAlumno, &compararMatricula);
+            alumno = buscarDato(lista, buscarAlumno, &compararMatricula);
             if(alumno != NULL){
               printf("Se ha encontrado un alumno>>\n");
               imprimirNombre(alumno);
@@ -107,7 +106,7 @@ int main(void){
           case 4:
             inputEntero("Ingrese los semestres del alumno>> ", &buscarAlumno->semestres);
             clear_buffer();
-            alumno = buscarDato(lista, &buscarAlumno, &compararSemestres);
+            alumno = buscarDato(lista, buscarAlumno, &compararSemestres);
             if(alumno != NULL){
               printf("Se ha encontrado un alumno>>\n");
               imprimirNombre(alumno);
@@ -119,12 +118,10 @@ int main(void){
             }
             break;
           case 5: // Borrar Alumno
-            printf("Ingrese la matricula del alumno a eliminar>> ");
-            scanf("%u", &buscarAlumno->matricula);
-            clear_buffer();
-            alumno = buscarDato(lista, &buscarAlumno, &compararMatricula);
+            inputEntero("Ingrese los semestres del alumno>> ", &buscarAlumno->semestres);
+            alumno = buscarDato(lista, buscarAlumno, &compararMatricula);
             if(alumno != NULL){
-              borrarDato(&lista, &buscarAlumno, &compararMatricula);
+              borrarDato(&lista, buscarAlumno, &compararMatricula);
               printf("Alumno eliminador exitosamente\n");
             } else {
               printf("No se encontro algun alumno con la matricula %d\n", buscarAlumno->matricula);
