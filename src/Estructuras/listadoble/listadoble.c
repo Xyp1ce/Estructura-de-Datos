@@ -30,7 +30,7 @@ void mostrarListaD(ListaD lista, int opc) {
       printf("->");
     }
   }
-  printf("NULL");
+  printf("NULL\n");
 }
 
 void borrarLista(ListaD *lista) {
@@ -42,6 +42,32 @@ void borrarLista(ListaD *lista) {
   }
   lista->inicio = lista->fin = NULL;
   lista->cant = 0;
+}
+
+void borrarDato(ListaD *lista, void *dato, int (*comparar)(void*, void*)) {
+    NodoD *actual;
+    for (actual = lista->inicio; actual != NULL; actual = actual->sig) {
+        if (comparar(dato, actual->dato) == 0) {
+            // Caso: eliminar primer nodo
+            if (actual == lista->inicio)
+                lista->inicio = actual->sig;
+            else
+                actual->ant->sig = actual->sig;
+            // Caso: eliminar último nodo
+            if (actual == lista->fin)
+                lista->fin = actual->ant;
+            else
+                actual->sig->ant = actual->ant;
+            lista->cant--;
+            // Si quedó vacía
+            if (lista->cant == 0) {
+                lista->inicio = NULL;
+                lista->fin = NULL;
+            }
+            free(actual);
+            break;
+        }
+    }
 }
 
 void* buscarDato(ListaD lista, void *dato, int (*comparar)(void*, void*)) {

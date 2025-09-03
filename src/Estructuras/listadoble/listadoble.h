@@ -14,6 +14,7 @@ typedef struct lista_doble {
 ListaD inicializarListaD(void);
 void mostrarListaD(ListaD lista, int opc);
 void borrarLista(ListaD *lista);
+void borrarDato(ListaD *lista,void* dato, int (*comparar)(void*, void*));
 void* buscarDato(ListaD lista, void *dato, int (*comparar)(void*, void*));
 void insertarOrdenado(ListaD *lista, void* dato);
 void insertarFinal(ListaD *lista, void* dato);
