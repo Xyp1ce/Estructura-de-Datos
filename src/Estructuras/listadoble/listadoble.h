@@ -1,7 +1,7 @@
 #ifndef LISTA_DOBLE_H
 #define LISTA_DOBLE_H
 
-#include "nododoble.h"
+#include "../nodos/nododoble.h"
 
 typedef struct 
 {

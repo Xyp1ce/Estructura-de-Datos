@@ -90,24 +90,3 @@ void imprimirAlumno(void *a)
   printf("%s_%d_%d_%.2f",aa->nombre,aa->matricula,aa->semestres,aa->promedio);
 
 }
-Alumno *llenarInfo(Lista lista){
-  Alumno new;
-  printf("Nombre>> ");
-  fgets(new.nombre, 64, stdin);
-  new.nombre[strcspn(new.nombre, "\n")] = '\0';
-  // new.nombre[1] = '\0';
-  printf("Matricula>> ");
-  scanf("%u", &new.matricula);
-  while(buscarDato(lista, &new.matricula, &compararMatricula) != NULL){
-    printf("Matricula>> ");
-    scanf("%u", &new.matricula);
-  }
-  CleanBuffer();
-  printf("Semestres>> ");
-  scanf("%d", &new.semestres);
-  CleanBuffer();
-  printf("Promedio>> ");
-  scanf("%f", &new.promedio);
-  CleanBuffer();
-  return crearAlumno(new);
-}
