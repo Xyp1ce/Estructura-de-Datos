@@ -3,7 +3,7 @@ dflags = -Wall -Werror -pedantic -std=c99 -g
 sourceNodo = ../nodos/nodo.o
 source = $(wildcard *.c)
 source_o = $(wildcard *.o)
-output = ../../../lib/libPila.a
+output = ../../../lib/libnoPila.a
 
 build :
 	gcc $(cflags) $(source) 

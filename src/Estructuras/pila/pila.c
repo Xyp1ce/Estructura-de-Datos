@@ -1,5 +1,6 @@
 #include "pila.h"
 #include <stdio.h>
+
 int llena(Pila pila)
 {
 	return pila.cantidad == pila.capacidad;
