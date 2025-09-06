@@ -3,16 +3,19 @@
 
 int llena(Pila pila)
 {
+  // retorna 1 si esta llena, 0 si hay algo
 	return pila.cantidad == pila.capacidad;
 }
 int vacia(Pila pila)
 {
+  // retorna 1 si esta vacia, 0 si hay algo
 	return pila.cantidad == 0 && pila.cima==NULL ;
 }
 void push(Pila *pila,void *dato)
 {
 	if(llena(*pila))
 	{
+    // No insertamos nada
 		printf("\n Overflow");
 	}
 	else
@@ -92,6 +95,7 @@ void imprimirPila(Pila pila)
 	while( !vacia(aux) )
 		push_nodo(&pila,pop_nodo(&aux));
 }
+
 void imprimirPilaInvertida(Pila pila)
 {
 	Pila aux = (Pila){NULL,pila.capacidad,0,NULL};
