@@ -30,7 +30,7 @@ void* pop(Pila *pila)
 {
 	if(vacia(*pila))
 	{
-		printf("\n Underflow");
+		printf("\nUnderflow\n");
 		return NULL;
 	}
 	else
