@@ -18,5 +18,6 @@ void* pop(Pila *pila);
 void imprimirPila(Pila pila);
 void imprimirPilaInvertida(Pila pila);
 void eliminarPila(Pila *pila);
+void limpiarPila(Pila *pila);
 
 #endif

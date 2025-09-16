@@ -95,9 +95,6 @@ int main(void){
         esCorrecto = 1;
         cadena = NULL;
         c = NULL;
-        pilaC.cantidad = 0;
-        pilaC.cima = NULL;
-
 
         /* Verificar si los parentesis, corchetes o llaves
         * se cierran correctamente. Ejemplo: 
@@ -141,6 +138,7 @@ int main(void){
         } else {
           printf("\nLa cadena no esta bien :(\n");
         }
+        eliminarPila(&pilaC);
         break;
       case 3:
         printf("Finalizando programa...\n");
