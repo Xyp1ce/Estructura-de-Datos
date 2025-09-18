@@ -1,8 +1,7 @@
 #include "pila.h"
 #include <stdio.h>
 
-int llena(Pila pila)
-{
+int llena(Pila pila){
   // retorna 1 si esta llena, 0 si hay algo
 	return pila.cantidad == pila.capacidad;
 }
@@ -12,8 +11,7 @@ int vacia(Pila pila){
 	return pila.cantidad == 0 && pila.cima==NULL ;
 }
 
-void push(Pila *pila,void *dato)
-{
+void push(Pila *pila,void *dato){
 	if(llena(*pila))
 	{
     // No insertamos nada
@@ -27,8 +25,8 @@ void push(Pila *pila,void *dato)
 		pila->cantidad++;
 	}
 }
-void* pop(Pila *pila)
-{
+
+void* pop(Pila *pila){
 	if(vacia(*pila))
 	{
 		printf("\nUnderflow\n");
@@ -49,8 +47,7 @@ void* pop(Pila *pila)
 	}
 }
 
-void push_nodo(Pila *pila,Nodo *nuevo)
-{
+void push_nodo(Pila *pila,Nodo *nuevo){
 	if(llena(*pila))
 	{
 		printf("\n Overflow");
@@ -122,4 +119,8 @@ void eliminarPila(Pila *pila)
 		if( pila->liberar )
 			pila->liberar(dato);
 	}
+}
+
+void* peek(Pila pila){
+  return pila.cima->dato;
 }

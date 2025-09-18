@@ -19,5 +19,6 @@ void imprimirPila(Pila pila);
 void imprimirPilaInvertida(Pila pila);
 void eliminarPila(Pila *pila);
 void limpiarPila(Pila *pila);
+void* peek(Pila pila);
 
 #endif
