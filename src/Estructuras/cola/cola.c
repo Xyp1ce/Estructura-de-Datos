@@ -1,23 +1,16 @@
 #include "cola.h"
 #include <stdio.h>
 
-
 Cola inicializarCola(void) {
 	return (Cola) {NULL,NULL,-1,0,NULL,NULL};
 }
 
 int llenaC(Cola cola) {
-  if(cola.cantidad == cola.capacidad)
-	  return 1;
-  else 
-    return 0;
+  return cola.cantidad == cola.capacidad;
 }
 
 int vaciaC(Cola cola) {	
-  if(cola.cantidad == 0)
-	  return 0;
-  else 
-    return 1;
+  return cola.cantidad == 0;
 }
 
 void enqueue(Cola *cola,void *dato) {	
@@ -25,11 +18,18 @@ void enqueue(Cola *cola,void *dato) {
     printf("Overflow");
   } else {
     Nodo *nuevo = crearNodo(dato);
-    nuevo->sig = cola->fin;
-    cola->fin = nuevo;
+    nuevo->sig = NULL;
+    if(cola->inicio == NULL) { // cola vacia 
+      cola->inicio = nuevo;
+      cola->fin = nuevo;
+    } else {
+      cola->fin->sig = nuevo;
+      cola->fin = nuevo;
+    }
     cola->cantidad++;
   }
 }
+
 void* peekC(Cola cola) {	
 	return cola.inicio->dato;
 }
@@ -52,15 +52,15 @@ void* dequeue(Cola *cola) {
   }
 	return NULL;
 }
-void imprimirCola(Cola cola)
-{
+
+void imprimirCola(Cola cola) {
 	Cola aux = (Cola){NULL,NULL,cola.capacidad,0,NULL,NULL};
 	Nodo *nodo;
 	printf("\n\nCola [%d]:",cola.cantidad);
 	while( !vaciaC(cola) )
 	{
 		nodo = dequeue_nodo(&cola);
-		printf("\n ");
+		printf("\n");
 		cola.imprimir(nodo->dato);
 		enqueue_nodo(&aux,nodo);
 	}
@@ -68,8 +68,7 @@ void imprimirCola(Cola cola)
 		enqueue_nodo(&cola,dequeue_nodo(&aux));
 }
 
-void eliminarCola(Cola *cola)
-{
+void eliminarCola(Cola *cola) {
 	void *dato;
 	while(!vaciaC(*cola))
 	{
@@ -80,8 +79,7 @@ void eliminarCola(Cola *cola)
 	return;
 }
 
-void* buscarC(Cola cola,void *dato,int (*comparar)(void*,void*))
-{
+void* buscarC(Cola cola,void *dato,int (*comparar)(void*,void*)) {
   Cola aux = (Cola){NULL,NULL,cola.capacidad,0,NULL,NULL};
   void *encontrado = NULL;
   while(!vaciaC(cola)){
