@@ -33,14 +33,17 @@ Pila solucion(unsigned char **lab);
 int main(void) {
 	unsigned char **lab; 
 	lab = (unsigned char**) crear_laberinto();
+  lab[5][9] = 'B';
 	imprimirLab(lab);
 
 	Pila pila = {NULL, REN * COL, 0, &imprimirCoordenada, &liberarCoordenada};
 
+	imprimirLab(lab);
 	pila = solucion(lab);
+	imprimirLab(lab);
 	printf("\n\nSolucion:\n");
-	imprimirPila(pila);
-
+	imprimirPilaInvertida(pila);
+  printf("\n\n");
 	liberarLaberinto(lab);
 
 	printf("\n\n");
@@ -75,7 +78,7 @@ x*x*xxxxxxx*x**x*xx*x*x*xx\
 x*x*********xx*x*xx*xxx*xx\
 x*xxxxxxxxxxx**x*********x\
 x***x***x***x*xxxxxxxxxx*x\
-x*x***x***x*************Bx\
+x*x***x***x**************x\
 xxxxxxxxxxxxxxxxxxxxxxxxxx\0";
 
 	unsigned char **lab;
@@ -141,8 +144,8 @@ void liberarCoordenada(void *dato) {
 int compararCoordenada(void *a,void *b) {
 	Coordenada *aa = a, *bb = b;
 	if (aa->x == bb->x && aa->y == bb->y)
-		return 0;
-	return 1;
+		return 1;
+	return 0;
 }
 
 unsigned char alternativas(unsigned char **lab,Coordenada *coordenada) {		
@@ -211,12 +214,14 @@ Pila solucion(unsigned char **lab) {
 	
 	push(&respuesta, coordenada);
 	
-	while (!vacia(respuesta) && compararCoordenada(coordenada, fin) != 0) {
+	while (!vacia(respuesta)) {
 		coordenada = peek(respuesta);
 		unsigned char posibles = alternativas(lab, coordenada);
-		imprimirCoordenada(coordenada);
 		imprimirPosibles(posibles);
-		imprimirPila(respuesta);
+    if(compararCoordenada(coordenada, fin)){ // Se encontro con el final
+      lab[coordenada->x][coordenada->y] = '.';
+      break;
+    }
 		
 		if (posibles) {
 			if (posibles & ARRIBA) {
