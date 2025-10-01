@@ -33,13 +33,15 @@ Pila solucion(unsigned char **lab);
 int main(void) {
 	unsigned char **lab; 
 	lab = (unsigned char**) crear_laberinto();
-	imprimirLab(lab);
+	lab[9][1] = 'B';
+  imprimirLab(lab);
 
 	Pila pila = {NULL, REN * COL, 0, &imprimirCoordenada, &liberarCoordenada};
 
 	pila = solucion(lab);
 	printf("\n\nSolucion:\n");
-	imprimirPila(pila);
+  imprimirLab(lab);
+	imprimirPilaInvertida(pila);
 
 	liberarLaberinto(lab);
 
@@ -75,7 +77,7 @@ x*x*xxxxxxx*x**x*xx*x*x*xx\
 x*x*********xx*x*xx*xxx*xx\
 x*xxxxxxxxxxx**x*********x\
 x***x***x***x*xxxxxxxxxx*x\
-x*x***x***x*************Bx\
+x*x***x***x**************x\
 xxxxxxxxxxxxxxxxxxxxxxxxxx\0";
 
 	unsigned char **lab;
@@ -98,7 +100,7 @@ xxxxxxxxxxxxxxxxxxxxxxxxxx\0";
 		for (j = 0; j < COL; j++) {
 			//printf("%c",tmp[(i*COL)+j]);
 			lab[i][j] = tmp[(i * COL) + j];
-		}   
+		}
 	}
 	return lab;
 }
@@ -113,7 +115,7 @@ void imprimirLab(unsigned char **lab) {
 				printf("  ");
 			else
 				printf("%c ", lab[i][j]);
-		}   
+		}
 	}
 }
 
@@ -141,8 +143,8 @@ void liberarCoordenada(void *dato) {
 int compararCoordenada(void *a,void *b) {
 	Coordenada *aa = a, *bb = b;
 	if (aa->x == bb->x && aa->y == bb->y)
-		return 0;
-	return 1;
+		return 1;
+	return 0;
 }
 
 unsigned char alternativas(unsigned char **lab,Coordenada *coordenada) {		
@@ -153,19 +155,19 @@ unsigned char alternativas(unsigned char **lab,Coordenada *coordenada) {
 	//EVALUAR ALTERNATIVA Y REGISTRAR POSIBILIDAD DE MOVIMIENTO EN UN REGISTRO DE BITS/BANDERAS
 
 	caracter = lab[coordenada->x - 1][coordenada->y];	// arriba
-	if (caracter != 'x' && caracter != '.' && caracter != 'o' && caracter != 'A')
+	if ((caracter != 'x' && caracter != '.' && caracter != 'o' && caracter != 'A') || caracter == 'B')
 		banderas |= ARRIBA;
 	
 	caracter = lab[coordenada->x + 1][coordenada->y];	// abajo
-	if (caracter != 'x' && caracter != '.' && caracter != 'o' && caracter != 'A')
+	if ((caracter != 'x' && caracter != '.' && caracter != 'o' && caracter != 'A') || caracter == 'B')
 		banderas |= ABAJO;
 	
 	caracter = lab[coordenada->x][coordenada->y + 1];	// derecha
-	if (caracter != 'x' && caracter != '.' && caracter != 'o' && caracter != 'A')
+	if ((caracter != 'x' && caracter != '.' && caracter != 'o' && caracter != 'A') || caracter == 'B')
 		banderas |= DERECHA;
 	
 	caracter = lab[coordenada->x][coordenada->y - 1];	// izquierda
-	if (caracter != 'x' && caracter != '.' && caracter != 'o' && caracter != 'A')
+	if ((caracter != 'x' && caracter != '.' && caracter != 'o' && caracter != 'A') || caracter == 'B')
 		banderas |= IZQUIERDA;
 
 	return banderas;
@@ -198,25 +200,32 @@ Pila solucion(unsigned char **lab) {
 	Coordenada *coordenada, *fin;
 	coordenada = fin = NULL;
 	
-	for (int i = 0; i < REN; i++)
-	{
-		for (int j = 0; j < COL; j++)
-		{
+	for (int i = 0; i < REN; i++) {
+		for (int j = 0; j < COL; j++) {
 			if (lab[i][j] == 'A')
 				coordenada = crearCoordenada(i, j);
 			if (lab[i][j] == 'B')
 				fin = crearCoordenada(i, j);
 		}
 	}
+ 
+  imprimirCoordenada(coordenada);
+  imprimirCoordenada(fin);
 	
 	push(&respuesta, coordenada);
 	
-	while (!vacia(respuesta) && compararCoordenada(coordenada, fin) != 0) {
+	while (!vacia(respuesta) ) {
+
 		coordenada = peek(respuesta);
 		unsigned char posibles = alternativas(lab, coordenada);
-		imprimirCoordenada(coordenada);
-		imprimirPosibles(posibles);
-		imprimirPila(respuesta);
+		// imprimirCoordenada(coordenada);
+		// imprimirPosibles(posibles);
+		// imprimirPila(respuesta);
+    //
+    if(compararCoordenada(coordenada, fin)) {
+      lab[coordenada->x][coordenada->y] = '.';
+      break;
+    }
 		
 		if (posibles) {
 			if (posibles & ARRIBA) {
@@ -244,8 +253,8 @@ Pila solucion(unsigned char **lab) {
 			lab[coordenada->x][coordenada->y] = 'o';	// marcar visitado
 			push(&basura, pop(&respuesta));
 		}
-		printf("\n\n");
-		imprimirLab(lab);
+		// printf("\n\n");
+		// imprimirLab(lab);
 	}
 	return respuesta;
 }

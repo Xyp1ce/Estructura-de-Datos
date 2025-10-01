@@ -54,13 +54,13 @@ void* dequeue(Cola *cola) {
 }
 
 void imprimirCola(Cola cola) {
+  printf("Cola[%d]: ", cola.cantidad);
 	Cola aux = (Cola){NULL,NULL,cola.capacidad,0,NULL,NULL};
 	Nodo *nodo;
-	printf("\n\nCola [%d]:",cola.cantidad);
 	while( !vaciaC(cola) )
 	{
 		nodo = dequeue_nodo(&cola);
-		printf("\n");
+		printf(" -> ");
 		cola.imprimir(nodo->dato);
 		enqueue_nodo(&aux,nodo);
 	}

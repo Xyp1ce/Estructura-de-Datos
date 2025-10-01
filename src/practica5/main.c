@@ -29,6 +29,7 @@ int main(void) {
 	Caja cajas[5];
 	int opcion;	
   
+  // Inicializar colas 
   for(int i = 0; i < 5; i++) {
     cajas[i].cola = inicializarCola();
     cajas[i].cola.capacidad = 20;
@@ -60,15 +61,13 @@ int main(void) {
         deshabilitarCaja(cajas);
         break;
       case 5: // Terminar programa
-        printf("Terminando programa...");
+        printf("Terminando programa...\n");
         break;
       default:
-        printf("\nOpcion invalida...");
-
+        printf("\nOpcion invalida...\n");
+        break;
 		}	
 	}while(opcion!=5);
-	
-	printf("\n\n FIN DE PROGRAMA");
 	return 0;
 }
 
@@ -89,9 +88,9 @@ void deshabilitarCaja(Caja *cajas){
     inputEntero("Que caja quieres deshabilitar? 1 - 5\n>> ", &opc);
   } while(opc > 5 || opc < 1);
   if(!(cajas[opc - 1].estado))
-    printf("Esa caja ya esta deshabilitada");
+    printf("Esa caja ya esta deshabilitada\n");
   else {
-    printf("Caja [%d] deshabilitada", opc);
+    printf("Caja [%d] deshabilitada\n", opc);
     cajas[opc - 1].estado = DESHABILITADA;
   }
 }
@@ -102,9 +101,9 @@ void habilitarCaja(Caja *cajas){
     inputEntero("Que caja quieres habilitar? 1 - 5\n>> ", &opc);
   } while(opc > 5 || opc < 1);
   if(cajas[opc - 1].estado)
-    printf("Esa caja ya esta habilitada");
+    printf("Esa caja ya esta habilitada\n");
   else {
-    printf("Caja [%d] habilitada", opc);
+    printf("Caja [%d] habilitada\n", opc);
     cajas[opc - 1].estado = HABILITADA;
   }
 }
@@ -132,48 +131,20 @@ int compararEnteros(void* a, int b) {
 }
 
 void imprimirCajero(Caja *cajas) {
-     // Arreglo de punteros a los nodos actuales de cada cola
-    Nodo *nodos[NUMERO_CAJAS];
-    int maxAltura = 0;
-
-    printf("\n================ SUPERMERCADO ================\n");
-
-    // Inicializamos los punteros
-    for(int i = 0; i < NUMERO_CAJAS; i++) {
-        nodos[i] = cajas[i].cola.inicio;
-        if(cajas[i].cola.cantidad > maxAltura)
-            maxAltura = cajas[i].cola.cantidad;
-    }
-
-    // Encabezado
-    for(int i = 0; i < NUMERO_CAJAS; i++) {
-        printf("Caja %d\t", i+1);
-    }
-    printf("\n----------------------------------------------\n");
-
-    // Imprimir fila por fila
-    for(int nivel = 0; nivel < maxAltura; nivel++) {
-        for(int i = 0; i < NUMERO_CAJAS; i++) {
-            if(nodos[i] != NULL) {
-                int *valor = (int*)nodos[i]->dato;
-                printf("{%d}\t", *valor);
-                nodos[i] = nodos[i]->sig; // avanzar al siguiente nodo
-            } else {
-                printf("   \t"); // espacio en blanco si ya no hay más en esa cola
-            }
-        }
-        printf("\n");
-    }
-
-    printf("==============================================\n"); // imprimirCola(cajas[0].cola);
-  // imprimirCola(cajas[1].cola);
-  // imprimirCola(cajas[2].cola);
-  // imprimirCola(cajas[3].cola);
-  // imprimirCola(cajas[4].cola);
+  imprimirCola(cajas[0].cola);
+  printf("\n");
+  imprimirCola(cajas[1].cola);
+  printf("\n");
+  imprimirCola(cajas[2].cola);
+  printf("\n");
+  imprimirCola(cajas[3].cola);
+  printf("\n");
+  imprimirCola(cajas[4].cola);
+  printf("\n");
 }
 
 void imprimirProducto(void *a) {
   int *aa;
   aa = a;
-  printf("{%d}\n",*aa);
+  printf("{%d}",*aa);
 }
