@@ -20,9 +20,6 @@ void insertarArbolOrdenado(NodoA *raiz,void *dato,int (*comparar)(void*,void*))
 	}
 }
 
-
-
-
 void insertarArbol(Arbol *arbol,void *dato)
 {
 	if(!arbol->raiz)
@@ -31,8 +28,6 @@ void insertarArbol(Arbol *arbol,void *dato)
 		insertarArbolOrdenado(arbol->raiz,dato,arbol->comparar);
 	arbol->cantidad++;
 }
-
-
 
 void imprimir_arbol(NodoA* nodo, int nivel,void (*imprimir)(void*))
 {
@@ -119,7 +114,6 @@ void postorden(NodoA *raiz,void (*imprimir)(void*))
 	imprimir(raiz->dato);	
 }
 
-
 void imprimirOrden(Arbol arbol,int opcion)
 {
 	switch(opcion)
@@ -138,3 +132,57 @@ void imprimirOrden(Arbol arbol,int opcion)
 			break;
 	}
 }
+
+void calcularAltura(NodoA *raiz, int *altura) {
+  int izquierdo, derecho;
+  izquierdo = derecho = *altura;
+  if(raiz->izq && izquierdo++)
+    calcularAltura(raiz->izq,&izquierdo);
+  if(raiz->dch && derecho++)
+    calcularAltura(raiz->dch, &derecho);
+  *altura = (izquierdo>derecho) ? izquierdo:derecho;
+}
+
+int altura(Arbol arbol) {
+  if(!arbol.raiz)
+    return 0;
+  int altura = 1;
+  calcularAltura(arbol.raiz, &altura);
+  return altura;
+}
+
+void extraccionDatos(NodoA *raiz, void **datos, int *indice) {
+  if(!raiz) 
+    return;
+  extraccionDatos(raiz->izq, datos, indice);
+  datos[*indice] = raiz->dato;
+  (*indice)++;
+  extraccionDatos(raiz->dch, datos, indice);
+}
+
+void equilibrar(Arbol *arbol) {
+  void (*liberar)(void*) = arbol->liberar;
+  arbol->liberar = NULL;
+  int indice = 0;
+  int cantidad = arbol->cantidad;
+  int *indices = calloc(cantidad, sizeof(int));
+  void **datos = calloc(cantidad, sizeof(void*));
+
+  extraccionDatos(arbol->raiz, datos, &indice);
+
+  eliminarArbol(arbol);
+  arbol->liberar = liberar;
+  // ARBOL VACIO 
+  // DATOS EN EL ARREGLO 
+  // HACER INSERCIONES EN EL ARBOL PARA QUE QUEDE EQUILIBRADO 
+  // SACAR INDICES Y COLOCARLOS EN EL ARREGLO 
+  // DE INDICES
+
+  for(int i = 0; i < cantidad; i++) {
+    insertarArbol(arbol, datos[indices[i]]);
+  }
+  free(datos);
+  free(indices);
+}
+
+

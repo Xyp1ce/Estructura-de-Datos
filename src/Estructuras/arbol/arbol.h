@@ -17,8 +17,11 @@ typedef struct
 	void (*liberar)(void*);
 }Arbol;
 
-
 void insertarArbol(Arbol *arbol,void *dato);
 void imprimirArbol(Arbol arbol);
 void imprimirOrden(Arbol arbol,int opcion);
+int altura(Arbol arbol);
+void equilibrar(Arbol *arbol);
+void eliminarArbol
+
 #endif
