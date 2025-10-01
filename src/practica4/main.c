@@ -226,7 +226,6 @@ Pila solucion(unsigned char **lab) {
 	
 	push(&respuesta, coordenada);
 	
-<<<<<<< HEAD
 	while (!vacia(respuesta) ) {
 
 		coordenada = peek(respuesta);
