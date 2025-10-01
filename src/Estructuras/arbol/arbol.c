@@ -20,9 +20,6 @@ void insertarArbolOrdenado(NodoA *raiz,void *dato,int (*comparar)(void*,void*))
 	}
 }
 
-
-
-
 void insertarArbol(Arbol *arbol,void *dato)
 {
 	if(!arbol->raiz)
@@ -31,8 +28,6 @@ void insertarArbol(Arbol *arbol,void *dato)
 		insertarArbolOrdenado(arbol->raiz,dato,arbol->comparar);
 	arbol->cantidad++;
 }
-
-
 
 void imprimir_arbol(NodoA* nodo, int nivel,void (*imprimir)(void*))
 {
@@ -118,7 +113,6 @@ void postorden(NodoA *raiz,void (*imprimir)(void*))
 	printf(" ");
 	imprimir(raiz->dato);	
 }
-
 
 void imprimirOrden(Arbol arbol,int opcion)
 {
