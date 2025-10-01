@@ -184,5 +184,3 @@ void equilibrar(Arbol *arbol) {
   free(datos);
   free(indices);
 }
-
-
