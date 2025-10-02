@@ -29,6 +29,23 @@ void insertarArbol(Arbol *arbol,void *dato)
 	arbol->cantidad++;
 }
 
+NodoA* buscarEnArbol(NodoA *raiz, int dato, NodoA *encontrado) {
+  if(encontrado->dato == NULL) {
+    if(!raiz) 
+      return NULL;
+    printf("\nComparando con %d", (*(int*)(raiz->dato)));
+    if(*((int*)(raiz->dato)) == dato) {
+      encontrado->dato = raiz->dato;
+    }
+    if(dato > (*((int*)(raiz->dato))))
+      buscarEnArbol(raiz->dch, dato, encontrado);
+    else
+      buscarEnArbol(raiz->izq, dato, encontrado);
+    return NULL;
+  }
+  return encontrado;
+}
+
 void imprimir_arbol(NodoA* nodo, int nivel,void (*imprimir)(void*))
 {
     int i;
@@ -167,7 +184,7 @@ void equilibrar(Arbol *arbol) {
   int cantidad = arbol->cantidad;
   int *indices = calloc(cantidad, sizeof(int));
   void **datos = calloc(cantidad, sizeof(void*));
-  void **ordenados = calloc(cantidad, sizeof(void*));
+  //void **ordenados = calloc(cantidad, sizeof(void*));
 
   extraccionDatos(arbol->raiz, datos, &indice);
   
@@ -180,7 +197,7 @@ void equilibrar(Arbol *arbol) {
   // SACAR INDICES Y COLOCARLOS EN EL ARREGLO 
   // DE INDICES
  
-  ordenarRaices(datos, ordenados,  datos+(cantidad-1), &indice);
+  //ordenarRaices(datos, ordenados,  datos+(cantidad-1), &indice);
 
   for(int i = 0; i < cantidad; i++) {
     insertarArbol(arbol, datos[indices[i]]);
@@ -199,13 +216,13 @@ void eliminarArbol(NodoA *raiz) {
   free(raiz->dato);
 }
 
-void ordenarRaices(void **datos, void **ordenados, int final, int *indice) {
-  int cant = 0;
-  for(int i = 0; datos[i]!=null ;i++)
-    cant++;
-  cant = cant/2;
-  if() {
-    ordenados[(*indice)++] = datos[cant];
-    ordenarRaices(datos, ordenados, datos+(cant-1), indice, cant)
-  }
-}
+// void ordenarRaices(void **datos, void **ordenados, int final, int *indice) {
+//   int cant = 0;
+//   for(int i = 0; datos[i]!=null ;i++)
+//     cant++;
+//   cant = cant/2;
+//   if() {
+//     ordenados[(*indice)++] = datos[cant];
+//     ordenarRaices(datos, ordenados, datos+(cant-1), indice, cant)
+//   }
+// }

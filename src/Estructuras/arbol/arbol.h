@@ -23,5 +23,6 @@ void imprimirOrden(Arbol arbol,int opcion);
 int altura(Arbol arbol);
 void equilibrar(Arbol *arbol);
 void eliminarArbol(NodoA *raiz);
+NodoA* buscarEnArbol(NodoA *raiz, int dato, NodoA *encontrado);
 
 #endif

@@ -30,19 +30,26 @@ int main(void)
 	insertarArbol(&arbol, crearEntero(1)); 
 
 	imprimirArbol(arbol);
-	
-	printf("\n PREORDEN: ");
-	imprimirOrden(arbol,PREORDEN);
-	printf("\n ORDEN: ");
-	imprimirOrden(arbol,ORDEN);
-	printf("\n INVERSO: ");
-	imprimirOrden(arbol,INVERSO);
-	printf("\n POSTORDEN: ");
-	imprimirOrden(arbol,POSTORDEN);
+	//
+	// printf("\n PREORDEN: ");
+	// imprimirOrden(arbol,PREORDEN);
+	// printf("\n ORDEN: ");
+	// imprimirOrden(arbol,ORDEN);
+	// printf("\n INVERSO: ");
+	// imprimirOrden(arbol,INVERSO);
+	// printf("\n POSTORDEN: ");
+	// imprimirOrden(arbol,POSTORDEN);
 
   printf("\nAltura: %d", altura(arbol));
-
-  equilibrar(&arbol);
+  NodoA bool;
+  bool.dato = NULL;
+  buscarEnArbol(arbol.raiz, 1, &bool);
+  if(bool.dato) {
+    printf("\nEncontrado\n");
+    printf("%d", (*(int*)(bool.dato)));
+  } else 
+    printf("\nNo encontrado\n");
+  // equilibrar(&arbol);
 	
 	printf("\n\n FIN DE PROGRAMA\n");
 	return 0;
