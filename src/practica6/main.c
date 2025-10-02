@@ -21,13 +21,14 @@ int main(void)
 	arbol.cantidad = 0;
 	arbol.imprimir = &imprimirEntero;
 	arbol.comparar = &compararEntero;
-  arbol.liberar = free();
+  arbol.liberar = free;
 	insertarArbol(&arbol, crearEntero(4));
 	insertarArbol(&arbol, crearEntero(2));
 	insertarArbol(&arbol, crearEntero(6));
 	insertarArbol(&arbol, crearEntero(3));
 	insertarArbol(&arbol, crearEntero(7));
-	insertarArbol(&arbol, crearEntero(5));
+	insertarArbol(&arbol, crearEntero(1)); 
+
 	imprimirArbol(arbol);
 	
 	printf("\n PREORDEN: ");
@@ -38,6 +39,10 @@ int main(void)
 	imprimirOrden(arbol,INVERSO);
 	printf("\n POSTORDEN: ");
 	imprimirOrden(arbol,POSTORDEN);
+
+  printf("\nAltura: %d", altura(arbol));
+
+  equilibrar(&arbol);
 	
 	printf("\n\n FIN DE PROGRAMA\n");
 	return 0;

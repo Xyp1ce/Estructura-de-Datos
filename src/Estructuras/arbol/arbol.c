@@ -167,20 +167,45 @@ void equilibrar(Arbol *arbol) {
   int cantidad = arbol->cantidad;
   int *indices = calloc(cantidad, sizeof(int));
   void **datos = calloc(cantidad, sizeof(void*));
+  void **ordenados = calloc(cantidad, sizeof(void*));
 
   extraccionDatos(arbol->raiz, datos, &indice);
+  
+  eliminarArbol(arbol->raiz);
 
-  eliminarArbol(arbol);
   arbol->liberar = liberar;
   // ARBOL VACIO 
   // DATOS EN EL ARREGLO 
   // HACER INSERCIONES EN EL ARBOL PARA QUE QUEDE EQUILIBRADO 
   // SACAR INDICES Y COLOCARLOS EN EL ARREGLO 
   // DE INDICES
+ 
+  ordenarRaices(datos, ordenados,  datos+(cantidad-1), &indice);
 
   for(int i = 0; i < cantidad; i++) {
     insertarArbol(arbol, datos[indices[i]]);
   }
   free(datos);
   free(indices);
+}
+
+void eliminarArbol(NodoA *raiz) {
+	if(!raiz)
+		return;
+  if(raiz->izq)
+    eliminarArbol(raiz->izq);
+  if(raiz->dch)
+	  eliminarArbol(raiz->dch);	
+  free(raiz->dato);
+}
+
+void ordenarRaices(void **datos, void **ordenados, int final, int *indice) {
+  int cant = 0;
+  for(int i = 0; datos[i]!=null ;i++)
+    cant++;
+  cant = cant/2;
+  if() {
+    ordenados[(*indice)++] = datos[cant];
+    ordenarRaices(datos, ordenados, datos+(cant-1), indice, cant)
+  }
 }
