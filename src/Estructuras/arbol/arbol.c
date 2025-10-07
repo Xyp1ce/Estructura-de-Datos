@@ -13,7 +13,7 @@ void insertarArbolOrdenado(NodoA *raiz, void *dato, int (*comparar)(void *, void
       raiz->izq = crearNodoA(dato);
   }
   else
-  {
+{
     // DERECHA
     if (raiz->dch)
       insertarArbolOrdenado(raiz->dch, dato, comparar);
@@ -70,26 +70,6 @@ void imprimir_arbol(NodoA *nodo, int nivel, void (*imprimir)(void *))
   }
 }
 
-NodoA *buscarEnArbol(NodoA *raiz, int dato, NodoA *encontrado)
-{
-  if (encontrado->dato == NULL)
-  {
-    if (!raiz)
-      return NULL;
-    printf("\nComparando con %d", (*(int *)(raiz->dato)));
-    if (*((int *)(raiz->dato)) == dato)
-    {
-      encontrado->dato = raiz->dato;
-    }
-    if (dato > (*((int *)(raiz->dato))))
-      buscarEnArbol(raiz->dch, dato, encontrado);
-    else
-      buscarEnArbol(raiz->izq, dato, encontrado);
-    return NULL;
-  }
-  return encontrado;
-}
-
 // void imprimir_arbol(NodoA *nodo, int nivel, void (*imprimir)(void *))
 // }
 
@@ -142,18 +122,18 @@ void imprimirOrden(Arbol arbol, int opcion)
 {
   switch (opcion)
   {
-  case PREORDEN:
-    preorden(arbol.raiz, arbol.imprimir);
-    break;
-  case ORDEN:
-    orden(arbol.raiz, arbol.imprimir);
-    break;
-  case INVERSO:
-    inverso(arbol.raiz, arbol.imprimir);
-    break;
-  case POSTORDEN:
-    postorden(arbol.raiz, arbol.imprimir);
-    break;
+    case PREORDEN:
+      preorden(arbol.raiz, arbol.imprimir);
+      break;
+    case ORDEN:
+      orden(arbol.raiz, arbol.imprimir);
+      break;
+    case INVERSO:
+      inverso(arbol.raiz, arbol.imprimir);
+      break;
+    case POSTORDEN:
+      postorden(arbol.raiz, arbol.imprimir);
+      break;
   }
 }
 
@@ -237,7 +217,7 @@ void ordenarRaices(void **ordenar, void **inicio, void **final, int *indice)
 // La definición antigua de eliminarArbol(NodoA*) fue removida para evitar duplicados.
 
 void compararArboles(Arbol arbolA, Arbol arbolB, int *estructura, int *datos) {
-  // Hacemos una verificacion recursiva revisando bajando por todas las ramas
+  // Hacemos una verificacion recursiva bajando por todas las ramas
   // del arbol hasta encontrar una diferencia en los datos
   // Si ambas raices son NULL entonces hacemos return
   // Si solamente una de ellas es NULL y la otra si tiene un dato
@@ -252,7 +232,7 @@ void compararArboles(Arbol arbolA, Arbol arbolB, int *estructura, int *datos) {
   }
 
   compararRaices(arbolA.raiz, arbolB.raiz, estructura);
-  
+
   int indice = 0;
 
   void **datosArbolA = calloc(arbolA.cantidad, sizeof(void *));
@@ -272,7 +252,7 @@ void compararArboles(Arbol arbolA, Arbol arbolB, int *estructura, int *datos) {
 void compararRaices(NodoA *raizA, NodoA *raizB, int *comparar) {
   if(!raizA && !raizB) return; // Estamos en las hojas por lo cual no hay nada
   if(!raizA || !raizB) *comparar = 0;
-  
+
   if(*comparar != 0) {
     compararRaices(raizA->izq, raizB->izq, comparar);
     compararRaices(raizA->dch, raizB->dch, comparar);
@@ -293,7 +273,6 @@ void bubbleSort(void **datos, int n) {
     swapped = 0;
     for (j = 0; j < n - 1; j++)
     {
-      /* Intentar comparar como int apuntado si es posible */
       if (datos[j] && datos[j + 1]) {
         int a = *((int *)datos[j]);
         int b = *((int *)datos[j + 1]);
@@ -302,7 +281,6 @@ void bubbleSort(void **datos, int n) {
           swapped = 1;
         }
       } else if (datos[j] > datos[j + 1]) {
-        /* fallback: comparar direcciones (no ideal) */
         swap_ptr(&datos[j], &datos[j + 1]);
         swapped = 1;
       }
@@ -328,6 +306,59 @@ void eliminar_NodosA(NodoA *raiz, void (*liberar)(void *)) {
   free(raiz);
 }
 
-void eliminarNodoA(NodoA *raiz, void(*liberar(void *)), int dato) {
-  // void (*liberar)(void *) = arbol->liberar;
+void eliminarNodoA(NodoA *raiz, void((*liberar)(void *)), void *dato, int(*comparar)(void*, void*)) {
+  // Utilizaremos la funcion de buscarEnArbol para encontrar el nodo a eliminar 
+  // Guardamos el nodo en un nodo auxiliar 
+  // hacemos los reenlaces necesario
+  // eliminamos el nodo Aux
+
+  // Buscar nodo a eliminar
+  // Aux tendra la direccion del nodo a eliminar
+  NodoA aux = {NULL, NULL, NULL};
+  // Buscar al padre de ese nodo
+  NodoA padreAux = {NULL, NULL, NULL};
+  buscarEnArbol(raiz, dato, &aux, comparar);
+  buscarPadre(raiz, &padreAux, dato, comparar);
 }
+
+void buscarEnArbol(NodoA *raiz, void dato, NodoA *encontrado, int(*comparar)(void*,void*)) {
+  if (encontrado->dato == NULL) {
+    if (!raiz)
+      return;
+    printf("\nComparando con %d", (*(int *)(raiz->dato)));
+    if (comparar(dato, raiz->dato)) {
+      encontrado->dato = raiz->dato;
+      encontrado->izq = raiz->izq;
+      encontrado->dch = raiz->dch;
+    }
+    if (dato > (*((int *)(raiz->dato))))
+      buscarEnArbol(raiz->dch, dato, encontrado);
+    else
+      buscarEnArbol(raiz->izq, dato, encontrado);
+    return;
+  }
+}
+
+// Buscar padre busca al padre del valor ingresado
+void buscarPadre(NodoA *raiz, NodoA* padre, void* dato, int(*comparar)(void*,void*)) {
+  if(!raiz || !dato)
+    return;
+
+  // SI el dato esta en alguno de los hijos, el nodo actual es el padre
+  if((raiz->izq && comparar(dato, raiz->izq->dato) == 0) || (raiz->dch && comparar(dato, raiz->dch->dato) == 0)) {
+    padre->dato = raiz->dato;
+    padre->dch = raiz->dch;
+    padre->izq = raiz->izq;
+    return
+  }
+
+  if(raiz->izq && comparar(dato, raiz->dato) < 0)
+    buscarPadre(raiz->izq, padre, dato, comparar);
+
+  if(raiz->dch && comparar(dato, raiz->dato) > 0)
+    buscarPadre(raiz->dch, padre, dato, comparar);
+
+  // no se encontro 
+  return;
+}
+

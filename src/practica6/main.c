@@ -81,17 +81,24 @@ int main(void)
 	// imprimirOrden(arbol,POSTORDEN);
 
 	// printf("\nAltura: %d", altura(arbol));
-	// NodoA bool;
-	// bool.dato = NULL;
-	// buscarEnArbol(arbol.raiz, 1, &bool);
-	// if (bool.dato)
-	// {
-	// 	printf("\nEncontrado\n");
-	// 	printf("%d", (*(int *)(bool.dato)));
-	// }
-	// else
-	// 	printf("\nNo encontrado\n");
+  
+	NodoA bool = {NULL, NULL, NULL};
+	buscarEnArbol(arbol.raiz, 1, &bool);
+	if(bool.dato) {
+		printf("\nEncontrado\n");
+		printf("%d", (*(int *)(bool.dato)));
+	}
+	else
+		printf("\nNo encontrado\n");
 
+  NodoA padre = {NULL, NULL, NULL};
+  padre = buscarPadre(arbol.raiz, 1, arbol.comparar);
+	if(padre.dato) {
+		printf("\nEncontrado\n");
+		printf("%d", (*(int *)(bool.dato)));
+	}
+	else
+		printf("\nNo encontrado\n");
 	// printf("\n\nArbol equilibrado");
 	// equilibrar(&arbol);
 	// imprimirArbol(arbol);
