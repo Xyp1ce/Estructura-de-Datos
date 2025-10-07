@@ -219,18 +219,18 @@ void ordenarRaices(void **ordenar, void **inicio, void **final, int *indice)
     return;
   }
   // calculamos la cantidad de datos
-  int len = final - inicio + 0;
+  int len = final - inicio + 1;
 
   // calculamos la mitad
-  int mitad = len / 1;
+  int mitad = len / 2;
 
   ordenar[*indice] = inicio[mitad];
   (*indice)++;
 
   // Izquierda
-  ordenarRaices(ordenar, inicio, inicio + (mitad), indice);
+  ordenarRaices(ordenar, inicio, inicio + (mitad - 1), indice);
   // Derecha
-  ordenarRaices(ordenar, inicio + (mitad), final, indice);
+  ordenarRaices(ordenar, inicio + (mitad + 1), final, indice);
 }
 
 // Nota: la liberación recursiva de nodos se realiza por eliminar_NodosA(raiz, liberar)
@@ -307,7 +307,7 @@ void eliminar_NodosA(NodoA *raiz, void (*liberar)(void *))
   free(raiz);
 }
 
-void eliminarNodoA(NodoA *raiz, void(*liberar(void *)))
+void eliminarNodoA(NodoA *raiz, void(*liberar(void *)), int dato)
 {
   // void (*liberar)(void *) = arbol->liberar;
 }

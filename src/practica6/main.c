@@ -52,7 +52,10 @@ int main(void)
 	}
 	else
 		printf("\nNo encontrado\n");
+
+	printf("\n\nArbol equilibrado");
 	equilibrar(&arbol);
+	imprimirArbol(arbol);
 
 	printf("\n\n FIN DE PROGRAMA\n");
 	return 0;

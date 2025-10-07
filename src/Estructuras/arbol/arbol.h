@@ -25,6 +25,6 @@ void equilibrar(Arbol *arbol);
 void ordenarRaices(void **ordenar, void **inicio, void **final, int *indice);
 void eliminarArbol(Arbol *arbol);
 void eliminar_NodosA(NodoA *raiz, void (*liberar)(void *));
-NodoA* buscarEnArbol(NodoA *raiz, int dato, NodoA *encontrado);
+NodoA* buscarEnArbol(NodoA *raiz, int dato, NodoA *encontrado, int dato);
 
 #endif
