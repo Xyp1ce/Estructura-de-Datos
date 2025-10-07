@@ -8,11 +8,11 @@
 #include "../captura/captura.h"
 #include "../Estructuras/arbol/arbol.h"
 
-int* crearEntero(int);
-int compararEntero(void*,void*);
-void imprimirEntero(void*);
+int *crearEntero(int);
+int compararEntero(void *, void *);
+void imprimirEntero(void *);
 
-void myprintf(char *formato,...);
+void myprintf(char *formato, ...);
 
 int main(void)
 {
@@ -21,50 +21,57 @@ int main(void)
 	arbol.cantidad = 0;
 	arbol.imprimir = &imprimirEntero;
 	arbol.comparar = &compararEntero;
-  arbol.liberar = free;
-	insertarArbol(&arbol, crearEntero(4));
-	insertarArbol(&arbol, crearEntero(2));
-	insertarArbol(&arbol, crearEntero(6));
-	insertarArbol(&arbol, crearEntero(3));
+	arbol.liberar = free;
+	insertarArbol(&arbol, crearEntero(8));
 	insertarArbol(&arbol, crearEntero(7));
-	insertarArbol(&arbol, crearEntero(1)); 
+	insertarArbol(&arbol, crearEntero(10));
+	insertarArbol(&arbol, crearEntero(6));
+	insertarArbol(&arbol, crearEntero(4));
+	insertarArbol(&arbol, crearEntero(1));
+	insertarArbol(&arbol, crearEntero(5));
+	insertarArbol(&arbol, crearEntero(9));
+	insertarArbol(&arbol, crearEntero(11));
 
 	imprimirArbol(arbol);
-	
+
 	printf("\n PREORDEN: ");
-	imprimirOrden(arbol,PREORDEN);
+	imprimirOrden(arbol, PREORDEN);
 	printf("\n ORDEN: ");
-	imprimirOrden(arbol,ORDEN);
+	imprimirOrden(arbol, ORDEN);
 	printf("\n INVERSO: ");
-	imprimirOrden(arbol,INVERSO);
+	imprimirOrden(arbol, INVERSO);
 	printf("\n POSTORDEN: ");
-	imprimirOrden(arbol,POSTORDEN);
+	imprimirOrden(arbol, POSTORDEN);
 
-  printf("\nAltura: %d", altura(arbol));
+	printf("\nAltura: %d\n", altura(arbol));
 
-  equilibrar(&arbol);
-	
+	equilibrar(&arbol);
+	printf("\nArbol equilibrado\n");
+	imprimirArbol(arbol);
 	printf("\n\n FIN DE PROGRAMA\n");
 	return 0;
 }
 
-int* crearEntero(int dato)
+int *crearEntero(int dato)
 {
 	int *nuevo = malloc(sizeof(int));
 	*nuevo = dato;
 	return nuevo;
 }
 
-int compararEntero(void*a,void*b)
+int compararEntero(void *a, void *b)
 {
-	int *aa = a,*bb=b;
-	if(*aa==*bb)return 0;
-	else if(*aa<*bb)return -1;
-	else return 1;
+	int *aa = a, *bb = b;
+	if (*aa == *bb)
+		return 0;
+	else if (*aa < *bb)
+		return -1;
+	else
+		return 1;
 }
 
 void imprimirEntero(void *a)
 {
-	int *aa=a;
-	printf("%d",*aa);
+	int *aa = a;
+	printf("%d", *aa);
 }

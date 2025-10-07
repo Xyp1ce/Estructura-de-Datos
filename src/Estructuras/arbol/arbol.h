@@ -22,6 +22,8 @@ void imprimirArbol(Arbol arbol);
 void imprimirOrden(Arbol arbol,int opcion);
 int altura(Arbol arbol);
 void equilibrar(Arbol *arbol);
-void eliminarArbol(NodoA *raiz);
+void ordenarRaices(void **ordenar, void **inicio, void **final, int *indice);
+void eliminarArbol(Arbol *arbol);
+void eliminar_NodosA(NodoA *raiz, void (*liberar)(void *));
 
 #endif
