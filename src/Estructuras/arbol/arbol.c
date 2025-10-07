@@ -236,33 +236,56 @@ void ordenarRaices(void **ordenar, void **inicio, void **final, int *indice)
 // Nota: la liberación recursiva de nodos se realiza por eliminar_NodosA(raiz, liberar)
 // La definición antigua de eliminarArbol(NodoA*) fue removida para evitar duplicados.
 
-void compararArboles(Arbol arbolA, Arbol arbolB, int *estructura, int *datos)
-{
-  int indice = 0;
-  if (arbolA.cantidad != arbolB.cantidad)
-  {
+void compararArboles(Arbol arbolA, Arbol arbolB, int *estructura, int *datos) {
+  // Hacemos una verificacion recursiva revisando bajando por todas las ramas
+  // del arbol hasta encontrar una diferencia en los datos
+  // Si ambas raices son NULL entonces hacemos return
+  // Si solamente una de ellas es NULL y la otra si tiene un dato
+  // ponemos estructura como 0 (falso)
+
+  if(!arbolA.raiz || !arbolB.raiz) {
+    // Uno o ambos arboles estan vacios
+    printf("No es posible realizar esta accion\n");
     *estructura = 0;
     *datos = 0;
     return;
   }
-  if (altura(arbolA) != altura(arbolB))
-    *estructura = 0;
+
+  compararRaices(arbolA.raiz, arbolB.raiz, estructura);
+  
+  int indice = 0;
+
   void **datosArbolA = calloc(arbolA.cantidad, sizeof(void *));
   void **datosArbolB = calloc(arbolB.cantidad, sizeof(void *));
   extraccionDatos(arbolA.raiz, datosArbolA, &indice);
   indice = 0;
   extraccionDatos(arbolB.raiz, datosArbolB, &indice);
+  // Ordenamos ambos arreglos menor a mayor
+  bubbleSort(datosArbolA, arbolA.cantidad);
+  bubbleSort(datosArbolB, arbolB.cantidad);
+  for(int i = 0; i < arbolA.cantidad; i++) {
+    // Cuando los datos
+    if(datosArbolA[i] != datosArbolB[i]) *datos = 0;
+  }
 }
 
-static void swap_ptr(void **a, void **b)
-{
+void compararRaices(NodoA *raizA, NodoA *raizB, int *comparar) {
+  if(!raizA && !raizB) return; // Estamos en las hojas por lo cual no hay nada
+  if(!raizA || !raizB) *comparar = 0;
+  
+  if(*comparar != 0) {
+    compararRaices(raizA->izq, raizB->izq, comparar);
+    compararRaices(raizA->dch, raizB->dch, comparar);
+  }
+}
+
+void swap_ptr(void **a, void **b) {
   void *tmp = *a;
   *a = *b;
   *b = tmp;
 }
 
-void bubbleSort(void **datos, int n)
-{
+void bubbleSort(void **datos, int n) {
   int i, j;
   int swapped;
   for (i = 0; i < n - 1; i++)
@@ -288,15 +311,13 @@ void bubbleSort(void **datos, int n)
   }
 }
 
-void eliminarArbol(Arbol *arbol)
-{
+void eliminarArbol(Arbol *arbol) {
   eliminar_NodosA(arbol->raiz, arbol->liberar);
   arbol->raiz = NULL;
   arbol->cantidad = 0;
 }
 
-void eliminar_NodosA(NodoA *raiz, void (*liberar)(void *))
-{
+void eliminar_NodosA(NodoA *raiz, void (*liberar)(void *)) {
   if (!raiz)
     return;
   eliminar_NodosA(raiz->izq, liberar);
@@ -307,7 +328,6 @@ void eliminar_NodosA(NodoA *raiz, void (*liberar)(void *))
   free(raiz);
 }
 
-void eliminarNodoA(NodoA *raiz, void(*liberar(void *)), int dato)
-{
+void eliminarNodoA(NodoA *raiz, void(*liberar(void *)), int dato) {
   // void (*liberar)(void *) = arbol->liberar;
 }

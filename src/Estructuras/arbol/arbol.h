@@ -25,6 +25,9 @@ void equilibrar(Arbol *arbol);
 void ordenarRaices(void **ordenar, void **inicio, void **final, int *indice);
 void eliminarArbol(Arbol *arbol);
 void eliminar_NodosA(NodoA *raiz, void (*liberar)(void *));
-NodoA* buscarEnArbol(NodoA *raiz, int dato, NodoA *encontrado, int dato);
-
+NodoA* buscarEnArbol(NodoA *raiz, int dato, NodoA *encontrado);
+void compararRaices(NodoA *raizA, NodoA *raizB, int *comparar);
+void bubbleSort(void **datos, int n);
+void swap_ptr(void **a, void **b);
+void compararArboles(Arbol arbolA, Arbol arbolB, int *estructura, int *datos);
 #endif

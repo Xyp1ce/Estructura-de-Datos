@@ -15,11 +15,20 @@ void imprimirEntero(void *);
 int main(void)
 {
 	Arbol arbol;
+	Arbol arbolA;
+
 	arbol.raiz = NULL;
 	arbol.cantidad = 0;
 	arbol.imprimir = &imprimirEntero;
 	arbol.comparar = &compararEntero;
 	arbol.liberar = free;
+
+	arbolA.raiz = NULL;
+	arbolA.cantidad = 0;
+	arbolA.imprimir = &imprimirEntero;
+	arbolA.comparar = &compararEntero;
+	arbolA.liberar = free;
+
 	insertarArbol(&arbol, crearEntero(8));
 	insertarArbol(&arbol, crearEntero(7));
 	insertarArbol(&arbol, crearEntero(10));
@@ -30,7 +39,37 @@ int main(void)
 	insertarArbol(&arbol, crearEntero(9));
 	insertarArbol(&arbol, crearEntero(11));
 
+	printf("\n");
 	imprimirArbol(arbol);
+	printf("\n\n");
+
+	insertarArbol(&arbolA, crearEntero(8));
+	insertarArbol(&arbolA, crearEntero(7));
+	insertarArbol(&arbolA, crearEntero(10));
+	insertarArbol(&arbolA, crearEntero(6));
+	insertarArbol(&arbolA, crearEntero(4));
+	insertarArbol(&arbolA, crearEntero(1));
+	insertarArbol(&arbolA, crearEntero(5));
+	insertarArbol(&arbolA, crearEntero(2));
+	insertarArbol(&arbolA, crearEntero(11));
+
+	imprimirArbol(arbolA);
+
+	// Inicializamos en uno asumiendo que son iguales
+	int estructura = 1;
+	int datos = 1;
+
+	compararArboles(arbol, arbolA, &estructura, &datos);
+
+	if(estructura) 
+		printf("\nLa estrucutra de los arboles es la misma\n");
+	else
+		printf("\nLa estructura es diferente\n");
+
+	if(datos) 
+		printf("\nLos datos entre los arboles son los mismos\n");
+	else
+		printf("\nLos datos entre los arboles son diferentes\n");
 
 	// printf("\n PREORDEN: ");
 	// imprimirOrden(arbol,PREORDEN);
@@ -41,21 +80,21 @@ int main(void)
 	// printf("\n POSTORDEN: ");
 	// imprimirOrden(arbol,POSTORDEN);
 
-	printf("\nAltura: %d", altura(arbol));
-	NodoA bool;
-	bool.dato = NULL;
-	buscarEnArbol(arbol.raiz, 1, &bool);
-	if (bool.dato)
-	{
-		printf("\nEncontrado\n");
-		printf("%d", (*(int *)(bool.dato)));
-	}
-	else
-		printf("\nNo encontrado\n");
+	// printf("\nAltura: %d", altura(arbol));
+	// NodoA bool;
+	// bool.dato = NULL;
+	// buscarEnArbol(arbol.raiz, 1, &bool);
+	// if (bool.dato)
+	// {
+	// 	printf("\nEncontrado\n");
+	// 	printf("%d", (*(int *)(bool.dato)));
+	// }
+	// else
+	// 	printf("\nNo encontrado\n");
 
-	printf("\n\nArbol equilibrado");
-	equilibrar(&arbol);
-	imprimirArbol(arbol);
+	// printf("\n\nArbol equilibrado");
+	// equilibrar(&arbol);
+	// imprimirArbol(arbol);
 
 	printf("\n\n FIN DE PROGRAMA\n");
 	return 0;
