@@ -30,7 +30,7 @@ int main(void)
 	insertarArbol(&arbol, crearEntero(1)); 
 
 	imprimirArbol(arbol);
-	//
+
 	// printf("\n PREORDEN: ");
 	// imprimirOrden(arbol,PREORDEN);
 	// printf("\n ORDEN: ");

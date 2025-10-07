@@ -226,3 +226,39 @@ void eliminarArbol(NodoA *raiz) {
 //     ordenarRaices(datos, ordenados, datos+(cant-1), indice, cant)
 //   }
 // }
+
+void compararArboles(Arbol arbolA, Arbol arbolB, int *estructura, int *datos) {
+  int indice = 0;
+  if(arbolA.cantidad != arbolB.cantidad) {
+    *estructura = 0;
+    *datos = 0;
+    return;
+  }
+  if(altura(arbolA) != altura(arbolB))
+    *estructura = 0;
+  void **datosArbolA = calloc(arbolA.cantidad, sizeof(void*));
+  void **datosArbolB = calloc(arbolB.cantidad, sizeof(void*));
+  extraccionDatos(arbolA.raiz, datosArbolA, &indice);
+  indice = 0;
+  extraccionDatos(arbolB.raiz, datosArbolB, &indice);
+}
+
+void swap(int* xp, int* yp) {
+  int temp = *xp;
+  *xp = *yp;
+  *yp = temp;
+}
+
+void bubbleSort(void **datos, int n) {
+  int i, j;
+  bool swapped;
+  for(i = 0; i < n - 1; i++) {
+    swapped = false;
+    for(j = 0; j < n - 1; j++) {
+      if(datos[j] > datos[j + 1]) {
+        swap(*datos[j], *datos[j + 1]);
+        swapped = true;
+      }
+    }
+  }
+}
