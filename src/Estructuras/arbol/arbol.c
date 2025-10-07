@@ -228,3 +228,8 @@ void eliminar_NodosA(NodoA *raiz, void (*liberar)(void *))
     liberar(raiz->dato);
   free(raiz);
 }
+
+void eliminarNodoA(NodoA *raiz, void (*liberar(void *))) {
+  // void (*liberar)(void *) = arbol->liberar;
+  
+}

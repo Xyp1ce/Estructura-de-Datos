@@ -12,7 +12,6 @@ int *crearEntero(int);
 int compararEntero(void *, void *);
 void imprimirEntero(void *);
 
-void myprintf(char *formato, ...);
 
 int main(void)
 {
