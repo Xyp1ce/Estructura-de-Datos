@@ -195,18 +195,19 @@ void ordenarRaices(void **ordenar, void **inicio, void **final, int *indice)
     return;
   }
 
+  // calculamos la cantidad de datos
   int len = final - inicio + 1;
 
+  // calculamos la mitad
   int mitad = len / 2;
 
   ordenar[*indice] = inicio[mitad];
   (*indice)++;
 
-  if (mitad > 0)
-    ordenarRaices(ordenar, inicio, inicio + (mitad - 1), indice);
-
-  if (mitad + 1 < len)
-    ordenarRaices(ordenar, inicio + (mitad + 1), final, indice);
+  // Izquierda
+  ordenarRaices(ordenar, inicio, inicio + (mitad - 1), indice);
+  // Derecha
+  ordenarRaices(ordenar, inicio + (mitad + 1), final, indice);
 }
 
 void eliminarArbol(Arbol *arbol)
