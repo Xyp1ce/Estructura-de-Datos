@@ -321,20 +321,21 @@ void eliminarNodoA(NodoA *raiz, void((*liberar)(void *)), void *dato, int(*compa
   buscarPadre(raiz, &padreAux, dato, comparar);
 }
 
-void buscarEnArbol(NodoA *raiz, void dato, NodoA *encontrado, int(*comparar)(void*,void*)) {
+void buscarEnArbol(NodoA *raiz, void *dato, NodoA *encontrado, int(*comparar)(void*,void*)) {
   if (encontrado->dato == NULL) {
     if (!raiz)
       return;
     printf("\nComparando con %d", (*(int *)(raiz->dato)));
-    if (comparar(dato, raiz->dato)) {
+    if (comparar(dato, raiz->dato) == 0) {
       encontrado->dato = raiz->dato;
       encontrado->izq = raiz->izq;
       encontrado->dch = raiz->dch;
     }
-    if (dato > (*((int *)(raiz->dato))))
-      buscarEnArbol(raiz->dch, dato, encontrado);
+
+    if (comparar(dato, raiz->dato) == 1)
+      buscarEnArbol(raiz->dch, dato, encontrado, comparar);
     else
-      buscarEnArbol(raiz->izq, dato, encontrado);
+      buscarEnArbol(raiz->izq, dato, encontrado, comparar);
     return;
   }
 }
@@ -349,7 +350,7 @@ void buscarPadre(NodoA *raiz, NodoA* padre, void* dato, int(*comparar)(void*,voi
     padre->dato = raiz->dato;
     padre->dch = raiz->dch;
     padre->izq = raiz->izq;
-    return
+    return;
   }
 
   if(raiz->izq && comparar(dato, raiz->dato) < 0)

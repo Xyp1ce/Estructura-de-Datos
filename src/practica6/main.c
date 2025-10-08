@@ -83,7 +83,9 @@ int main(void)
 	// printf("\nAltura: %d", altura(arbol));
   
 	NodoA bool = {NULL, NULL, NULL};
-	buscarEnArbol(arbol.raiz, 1, &bool);
+
+  NodoA buscar = {NULL, NULL, crearEntero(1)};
+	buscarEnArbol(arbol.raiz, buscar.dato, &bool, arbol.comparar);
 	if(bool.dato) {
 		printf("\nEncontrado\n");
 		printf("%d", (*(int *)(bool.dato)));
@@ -92,10 +94,10 @@ int main(void)
 		printf("\nNo encontrado\n");
 
   NodoA padre = {NULL, NULL, NULL};
-  padre = buscarPadre(arbol.raiz, 1, arbol.comparar);
+  buscarPadre(arbol.raiz, &padre, buscar.dato, arbol.comparar);
 	if(padre.dato) {
-		printf("\nEncontrado\n");
-		printf("%d", (*(int *)(bool.dato)));
+		printf("\nPadre encontrado\n");
+		printf("%d", (*(int *)(padre.dato)));
 	}
 	else
 		printf("\nNo encontrado\n");
