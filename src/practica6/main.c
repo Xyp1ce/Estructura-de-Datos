@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,6 +14,7 @@ void imprimirEntero(void *);
 int main(void)
 {
 	Arbol arbol;
+	Arbol arbolB;
 	// Arbol arbolA;
 
 	arbol.raiz = NULL;
@@ -23,93 +23,127 @@ int main(void)
 	arbol.comparar = &compararEntero;
 	arbol.liberar = free;
 
+	arbolB.raiz = NULL;
+	arbolB.cantidad = 0;
+	arbolB.imprimir = &imprimirEntero;
+	arbolB.comparar = &compararEntero;
+	arbolB.liberar = free;
+
 	// arbolA.raiz = NULL;
 	// arbolA.cantidad = 0;
 	// arbolA.imprimir = &imprimirEntero;
 	// arbolA.comparar = &compararEntero;
 	// arbolA.liberar = free;
 
-	insertarArbol(&arbol, crearEntero(8));
-	insertarArbol(&arbol, crearEntero(7));
-	insertarArbol(&arbol, crearEntero(10));
-	insertarArbol(&arbol, crearEntero(6));
-	insertarArbol(&arbol, crearEntero(4));
-	insertarArbol(&arbol, crearEntero(1));
-	insertarArbol(&arbol, crearEntero(5));
-	insertarArbol(&arbol, crearEntero(9));
-	insertarArbol(&arbol, crearEntero(11));
+	// menú interactivo
+	int opcion = 0;
+	while (opcion != 9) {
+		printf("\n=== MENU ===\n");
+		printf("1. Insertar en arbol A\n");
+		printf("2. Insertar en arbol B\n");
+		printf("3. Comparar Arboles\n");
+		printf("4. Eliminar dato en arbol A\n");
+		printf("5. Eliminar dato en arbol B\n");
+		printf("6. Ver profundidades (altura)\n");
+		printf("7. Equilibrar arboles (si factor fuera de [-1,1])\n");
+		printf("8. Mostrar arboles (A y B)\n");
+		printf("9. Terminar programa\n");
+		printf("Seleccione una opcion: ");
+		if (scanf("%d", &opcion) != 1) { 
+			while(getchar()!='\n'); 
+			opcion = 0; 
+			continue; 
+		}
 
-	printf("\n");
-	imprimirArbol(arbol);
-	printf("\n\n");
-
-	NodoA buscar = {NULL, NULL, crearEntero(11)};
-  printf("Eliminar %d\n\n", (*(int*)(buscar.dato)));
-  eliminarNodoA(arbol.raiz, arbol.liberar, buscar.dato, arbol.comparar);
-  printf("\nEliminado\n\n");
-  imprimirArbol(arbol);
-
-	// insertarArbol(&arbolA, crearEntero(8));
-	// insertarArbol(&arbolA, crearEntero(7));
-	// insertarArbol(&arbolA, crearEntero(10));
-	// insertarArbol(&arbolA, crearEntero(6));
-	// insertarArbol(&arbolA, crearEntero(4));
-	// insertarArbol(&arbolA, crearEntero(1));
-	// insertarArbol(&arbolA, crearEntero(5));
-	// insertarArbol(&arbolA, crearEntero(2));
-	// insertarArbol(&arbolA, crearEntero(11));
-	//
-	// imprimirArbol(arbolA);
-	//
-	// // Inicializamos en uno asumiendo que son iguales
-	// int estructura = 1;
-	// int datos = 1;
-	//
-	// compararArboles(arbol, arbolA, &estructura, &datos);
-	//
-	// if(estructura) 
-	// 	printf("\nLa estrucutra de los arboles es la misma\n");
-	// else
-	// 	printf("\nLa estructura es diferente\n");
-	//
-	// if(datos) 
-	// 	printf("\nLos datos entre los arboles son los mismos\n");
-	// else
-	// 	printf("\nLos datos entre los arboles son diferentes\n");
-	//
-	// printf("\n PREORDEN: ");
-	// imprimirOrden(arbol,PREORDEN);
-	// printf("\n ORDEN: ");
-	// imprimirOrden(arbol,ORDEN);
-	// printf("\n INVERSO: ");
-	// imprimirOrden(arbol,INVERSO);
-	// printf("\n POSTORDEN: ");
-	// imprimirOrden(arbol,POSTORDEN);
-
-	// printf("\nAltura: %d", altura(arbol));
-  
-	// NodoA bool = {NULL, NULL, NULL};
-	// buscarEnArbol(arbol.raiz, buscar.dato, &bool, arbol.comparar);
-	// if(bool.dato) {
-	// 	printf("\nEncontrado\n");
-	// 	printf("%d", (*(int *)(bool.dato)));
-	// }
-	// else
-	// 	printf("\nNo encontrado\n");
-	//
-	//  NodoA padre = {NULL, NULL, NULL};
-	//  buscarPadre(arbol.raiz, &padre, buscar.dato, arbol.comparar);
-	// if(padre.dato) {
-	// 	printf("\nPadre encontrado\n");
-	// 	printf("%d", (*(int *)(padre.dato)));
-	// }
-	// else
-	// 	printf("\nNo encontrado\n");
-	// printf("\n\nArbol equilibrado");
-	// equilibrar(&arbol);
-	// imprimirArbol(arbol);
-
-	printf("\n\n FIN DE PROGRAMA\n");
+		switch (opcion) {
+			case 1:
+			case 2: {
+				int val;
+				printf("Ingrese entero a insertar: ");
+				if (scanf("%d", &val) != 1) { 
+					while(getchar()!='\n'); 
+					break; 
+				}
+				int *p = crearEntero(val);
+				if (opcion == 1) 
+					insertarArbol(&arbol, p); 
+				else 
+					insertarArbol(&arbolB, p);
+				printf("Insertado %d en arbol %c\n", val, (opcion==1)?'A':'B');
+				break;
+			}
+			case 3: {
+				int estructura = 1, datos = 1;
+				compararArboles(arbol, arbolB, &estructura, &datos);
+				printf("Resultado comparacion:\n");
+				printf("  Estructura igual: %s\n", estructura?"SI":"NO");
+				printf("  Datos iguales: %s\n", datos?"SI":"NO");
+				break;
+			}
+			case 4:
+			case 5: {
+				int val;
+				printf("Ingrese entero a eliminar: ");
+				if (scanf("%d", &val) != 1) { 
+					while(getchar()!='\n'); 
+					break; 
+				}
+				if (opcion == 4) 
+					eliminarNodoA(&arbol, arbol.liberar, &val, arbol.comparar);
+				else 
+					eliminarNodoA(&arbolB, arbolB.liberar, &val, arbolB.comparar);
+				printf("Solicitud de eliminacion de %d en arbol %c procesada\n", val, (opcion==4)?'A':'B');
+				break;
+			}
+			case 6: {
+				int ha = altura(arbol);
+				int hb = altura(arbolB);
+				printf("Altura arbol A: %d\n", ha);
+				printf("Altura arbol B: %d\n", hb);
+				break;
+			}
+			case 7: {
+				int leftA = 0, rightA = 0, leftB = 0, rightB = 0;
+				if (arbol.raiz) { 
+					Arbol t = { arbol.raiz->izq, 0, arbol.imprimir, arbol.comparar, arbol.liberar }; 
+					leftA = altura(t); Arbol t2 = { arbol.raiz->dch, 0, arbol.imprimir, arbol.comparar, arbol.liberar }; 
+					rightA = altura(t2); 
+				}
+				if (arbolB.raiz) { 
+					Arbol t = { arbolB.raiz->izq, 0, arbolB.imprimir, arbolB.comparar, arbolB.liberar }; 
+					leftB = altura(t); 
+					Arbol t2 = { arbolB.raiz->dch, 0, arbolB.imprimir, arbolB.comparar, arbolB.liberar }; 
+					rightB = altura(t2); 
+				}
+				int factorA = leftA - rightA; int factorB = leftB - rightB;
+				if (factorA < -1 || factorA > 1) { 
+					equilibrar(&arbol); 
+					printf("Arbol A equilibrado (factor=%d)\n", factorA); 
+				}
+				else 
+					printf("Arbol A ya balanceado (factor=%d)\n", factorA);
+				if (factorB < -1 || factorB > 1) { 
+					equilibrar(&arbolB); 
+					printf("Arbol B equilibrado (factor=%d)\n", factorB); 
+				}
+				else 
+					printf("Arbol B ya balanceado (factor=%d)\n", factorB);
+				break;
+			}
+			case 8:
+				printf("\n--- Arbol A ---\n"); imprimirArbol(arbol);
+				printf("\n--- Arbol B ---\n"); imprimirArbol(arbolB);
+				printf("\n");
+				break;
+			case 9:
+				printf("Saliendo...\n");
+				break;
+			default:
+				printf("Opcion invalida\n");
+		}
+		// limpiar buffer
+		while(getchar()!='\n');
+	}
 	return 0;
 }
 

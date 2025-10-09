@@ -306,69 +306,77 @@ void eliminar_NodosA(NodoA *raiz, void (*liberar)(void *)) {
   free(raiz);
 }
 
-void eliminarNodoA(NodoA *raiz, void((*liberar)(void *)), void *dato, int(*comparar)(void*, void*)) {
-  // Utilizaremos la funcion de buscarEnArbol para encontrar el nodo a eliminar 
-  // Guardamos el nodo en un nodo auxiliar 
-  // hacemos los reenlaces necesario
-  // eliminamos el nodo Aux
+void eliminarNodoA(Arbol *arbol, void((*liberar)(void *)), void *dato, int(*comparar)(void*, void*)) {
+  if (!arbol || !arbol->raiz) return;
 
-  // Buscar nodo a eliminar
-  // Aux tendra la direccion del nodo a eliminar
-  NodoA aux = {NULL, NULL, dato};
-  // Buscar al padre de ese nodo
-  NodoA padreAux = {NULL, NULL, dato};
-
-  buscarEnArbol(raiz, dato, &aux, comparar);
-  if(aux.dato){
-    printf("\nEncontrado\n");
-    printf("%d", (*(int *)(aux.dato)));
-  } else {
-    // Si no lo encuentra entonces cancelamos 
-    printf("\nNo encontrado\n");
+  NodoA *raiz = arbol->raiz;
+  // Auxiliar buscar nodo por comparación 
+  NodoA *find = raiz;
+  while (find) {
+    int cmp = comparar(dato, find->dato);
+    if (cmp == 0) break;
+    if (cmp > 0) 
+      find = find->dch; 
+    else 
+      find = find->izq;
+  }
+  if (!find) {
+    // no encontrado 
     return;
   }
 
-  buscarPadre(raiz, &padreAux, dato, comparar);
-  printf("\nPadre encontrado\n");
-  printf("%d", (*(int *)(padreAux.dato)));
+  NodoA *padre = buscarPadre(raiz, dato, comparar);
 
-  NodoA extremoDerecha = {NULL, NULL, NULL};
-  NodoA extremoIzquierda = {NULL, NULL, NULL};
+  /* 
+   Si el nodo a eliminar es la raíz: la nueva raíz será el subárbol izquierdo.
+   El subárbol derecho del nodo eliminado se acopla al extremo derecho del subárbol izquierdo.
+   Si el nodo no es la raíz: el subárbol izquierdo toma la posición del nodo eliminado y
+   el subárbol derecho del nodo eliminado se acopla al extremo derecho del subárbol izquierdo.
+  */
 
-  // Hacer reenlaces 
-  if(!raiz){
-    printf("\nNo hay raiz");
-    return;
-  } else if(comparar(aux.dato, raiz->dato) == 0) { // El nodo a eliminar es la raiz
-    raiz = aux.izq;
-    extremoDerecha = extremoDch(aux.izq);
-    extremoDerecha.dch = aux.dch;
-  } else if(aux.izq) {
-    printf("\nReelazando lado izquierdo\n");
-    padreAux.izq = aux.izq;
-    if(aux.dch){
-      if(comparar(aux.dch->dato, padreAux.izq->dato) == -1){
-        extremoIzquierda = extremoIzq(padreAux.izq);
-        if(comparar(extremoIzquierda.dato, aux.dch->dato) >= 0)
-          extremoIzquierda.dch = aux.dch;
-        else 
-          extremoIzquierda.izq = aux.dch;
-      } else { // Dato es mayor o igual a la izquierda del padre
-        extremoDerecha = extremoDch(padreAux.izq);
-        if(comparar(extremoDerecha.dato, aux.dch->dato) >= 0)
-          extremoDerecha.dch = aux.dch;
-        else
-          extremoDerecha.izq = aux.dch;
-      }
+  // El nodo es la raiz 
+  if (padre == NULL && comparar(find->dato, raiz->dato) == 0) {
+    NodoA *left = find->izq;
+    NodoA *right = find->dch;
+    if (left) {
+      NodoA *ext = extremoDch(left);
+      if (ext) ext->dch = right;
+      arbol->raiz = left;
+    } else {
+      /* si no hay left, la nueva raiz será right (o NULL) */
+      arbol->raiz = right;
     }
-  } else if(aux.dch) // No hay nodo en la izquierda del nodo a eliminar
-    padreAux.izq = aux.dch;
-  else 
-    printf("\nNo hay nada que hacer\n\n");
-  
-  aux.dato = NULL;
-  aux.izq = NULL;
-  aux.dch = NULL;
+    if (liberar && find->dato) liberar(find->dato);
+    free(find);
+    arbol->cantidad--;
+    return;
+  }
+
+  /* Nodo no raiz */
+  NodoA *left = find->izq;
+  NodoA *right = find->dch;
+  if (left) {
+    // enlazar left en la posición del nodo a eliminar 
+    if (padre->izq == find) 
+      padre->izq = left; 
+    else if (padre->dch == find) 
+      padre->dch = left;
+    NodoA *ext = extremoDch(left);
+    if (ext) 
+      ext->dch = right;
+    if (liberar && find->dato) 
+      liberar(find->dato);
+    free(find);
+    arbol->cantidad--;
+    return;
+  } else {
+    // no hay left simplemente reemplazar por right 
+    if (padre->izq == find) padre->izq = right; else if (padre->dch == find) padre->dch = right;
+    if (liberar && find->dato) liberar(find->dato);
+    free(find);
+    arbol->cantidad--;
+    return;
+  }
 }
 
 void buscarEnArbol(NodoA *raiz, void *dato, NodoA *encontrado, int(*comparar)(void*,void*)) {
@@ -391,48 +399,39 @@ void buscarEnArbol(NodoA *raiz, void *dato, NodoA *encontrado, int(*comparar)(vo
 }
 
 // Buscar padre busca al padre del valor ingresado
-void buscarPadre(NodoA *raiz, NodoA* padre, void* dato, int(*comparar)(void*,void*)) {
-  if(!raiz || !dato)
-    return;
+NodoA* buscarPadre(NodoA *raiz, void* dato, int(*comparar)(void*,void*)) {
+  if (!raiz || !dato) return NULL;
 
-  // Caso en el que el padre del dato y el dato sean la raiz
-  if(comparar(raiz->dato, dato) == 0) {
-    padre->dato = dato;
-    padre->dch = raiz->dch;
-    padre->izq = raiz->izq;
-    return;
+  /* Si alguno de los hijos es el nodo buscado, la raiz actual es el padre */
+  if ((raiz->izq && comparar(dato, raiz->izq->dato) == 0) ||
+      (raiz->dch && comparar(dato, raiz->dch->dato) == 0)) {
+    return raiz;
   }
 
-  // SI el dato esta en alguno de los hijos, el nodo actual es el padre
-  if((raiz->izq && comparar(dato, raiz->izq->dato) == 0) || (raiz->dch && comparar(dato, raiz->dch->dato) == 0)) {
-    padre->dato = raiz->dato;
-    padre->dch = raiz->dch;
-    padre->izq = raiz->izq;
-    return;
-  }
+  /* Si la raiz misma contiene el dato, no tiene padre */
+  if (comparar(raiz->dato, dato) == 0) return NULL;
 
-  if(raiz->izq && comparar(dato, raiz->dato) < 0)
-    buscarPadre(raiz->izq, padre, dato, comparar);
+  /* Recursión según dirección */
+  if (raiz->izq && comparar(dato, raiz->dato) < 0)
+    return buscarPadre(raiz->izq, dato, comparar);
+  if (raiz->dch && comparar(dato, raiz->dato) > 0)
+    return buscarPadre(raiz->dch, dato, comparar);
 
-  if(raiz->dch && comparar(dato, raiz->dato) > 0)
-    buscarPadre(raiz->dch, padre, dato, comparar);
-
-  // no se encontro 
-  return;
+  return NULL;
 }
 
-NodoA extremoDch(NodoA *raiz){
-  NodoA dch;
-  while(raiz != NULL) {
-    dch = extremoDch(raiz->dch);
+NodoA* extremoDch(NodoA *raiz){
+  if (!raiz) return NULL;
+  while (raiz->dch) {
+    raiz = raiz->dch;
   }
-  return dch;
+  return raiz;
 }
 
-NodoA extremoIzq(NodoA *raiz){
-  NodoA izq;
-  while(raiz != NULL) {
-    izq = extremoDch(raiz->izq);
+NodoA* extremoIzq(NodoA *raiz){
+  if (!raiz) return NULL;
+  while (raiz->izq) {
+    raiz = raiz->izq;
   }
-  return izq;
+  return raiz;
 }
