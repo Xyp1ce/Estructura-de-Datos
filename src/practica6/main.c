@@ -15,7 +15,7 @@ void imprimirEntero(void *);
 int main(void)
 {
 	Arbol arbol;
-	Arbol arbolA;
+	// Arbol arbolA;
 
 	arbol.raiz = NULL;
 	arbol.cantidad = 0;
@@ -23,11 +23,11 @@ int main(void)
 	arbol.comparar = &compararEntero;
 	arbol.liberar = free;
 
-	arbolA.raiz = NULL;
-	arbolA.cantidad = 0;
-	arbolA.imprimir = &imprimirEntero;
-	arbolA.comparar = &compararEntero;
-	arbolA.liberar = free;
+	// arbolA.raiz = NULL;
+	// arbolA.cantidad = 0;
+	// arbolA.imprimir = &imprimirEntero;
+	// arbolA.comparar = &compararEntero;
+	// arbolA.liberar = free;
 
 	insertarArbol(&arbol, crearEntero(8));
 	insertarArbol(&arbol, crearEntero(7));
@@ -43,34 +43,40 @@ int main(void)
 	imprimirArbol(arbol);
 	printf("\n\n");
 
-	insertarArbol(&arbolA, crearEntero(8));
-	insertarArbol(&arbolA, crearEntero(7));
-	insertarArbol(&arbolA, crearEntero(10));
-	insertarArbol(&arbolA, crearEntero(6));
-	insertarArbol(&arbolA, crearEntero(4));
-	insertarArbol(&arbolA, crearEntero(1));
-	insertarArbol(&arbolA, crearEntero(5));
-	insertarArbol(&arbolA, crearEntero(2));
-	insertarArbol(&arbolA, crearEntero(11));
+	NodoA buscar = {NULL, NULL, crearEntero(11)};
+  printf("Eliminar %d\n\n", (*(int*)(buscar.dato)));
+  eliminarNodoA(arbol.raiz, arbol.liberar, buscar.dato, arbol.comparar);
+  printf("\nEliminado\n\n");
+  imprimirArbol(arbol);
 
-	imprimirArbol(arbolA);
-
-	// Inicializamos en uno asumiendo que son iguales
-	int estructura = 1;
-	int datos = 1;
-
-	compararArboles(arbol, arbolA, &estructura, &datos);
-
-	if(estructura) 
-		printf("\nLa estrucutra de los arboles es la misma\n");
-	else
-		printf("\nLa estructura es diferente\n");
-
-	if(datos) 
-		printf("\nLos datos entre los arboles son los mismos\n");
-	else
-		printf("\nLos datos entre los arboles son diferentes\n");
-
+	// insertarArbol(&arbolA, crearEntero(8));
+	// insertarArbol(&arbolA, crearEntero(7));
+	// insertarArbol(&arbolA, crearEntero(10));
+	// insertarArbol(&arbolA, crearEntero(6));
+	// insertarArbol(&arbolA, crearEntero(4));
+	// insertarArbol(&arbolA, crearEntero(1));
+	// insertarArbol(&arbolA, crearEntero(5));
+	// insertarArbol(&arbolA, crearEntero(2));
+	// insertarArbol(&arbolA, crearEntero(11));
+	//
+	// imprimirArbol(arbolA);
+	//
+	// // Inicializamos en uno asumiendo que son iguales
+	// int estructura = 1;
+	// int datos = 1;
+	//
+	// compararArboles(arbol, arbolA, &estructura, &datos);
+	//
+	// if(estructura) 
+	// 	printf("\nLa estrucutra de los arboles es la misma\n");
+	// else
+	// 	printf("\nLa estructura es diferente\n");
+	//
+	// if(datos) 
+	// 	printf("\nLos datos entre los arboles son los mismos\n");
+	// else
+	// 	printf("\nLos datos entre los arboles son diferentes\n");
+	//
 	// printf("\n PREORDEN: ");
 	// imprimirOrden(arbol,PREORDEN);
 	// printf("\n ORDEN: ");
@@ -82,25 +88,23 @@ int main(void)
 
 	// printf("\nAltura: %d", altura(arbol));
   
-	NodoA bool = {NULL, NULL, NULL};
-
-  NodoA buscar = {NULL, NULL, crearEntero(1)};
-	buscarEnArbol(arbol.raiz, buscar.dato, &bool, arbol.comparar);
-	if(bool.dato) {
-		printf("\nEncontrado\n");
-		printf("%d", (*(int *)(bool.dato)));
-	}
-	else
-		printf("\nNo encontrado\n");
-
-  NodoA padre = {NULL, NULL, NULL};
-  buscarPadre(arbol.raiz, &padre, buscar.dato, arbol.comparar);
-	if(padre.dato) {
-		printf("\nPadre encontrado\n");
-		printf("%d", (*(int *)(padre.dato)));
-	}
-	else
-		printf("\nNo encontrado\n");
+	// NodoA bool = {NULL, NULL, NULL};
+	// buscarEnArbol(arbol.raiz, buscar.dato, &bool, arbol.comparar);
+	// if(bool.dato) {
+	// 	printf("\nEncontrado\n");
+	// 	printf("%d", (*(int *)(bool.dato)));
+	// }
+	// else
+	// 	printf("\nNo encontrado\n");
+	//
+	//  NodoA padre = {NULL, NULL, NULL};
+	//  buscarPadre(arbol.raiz, &padre, buscar.dato, arbol.comparar);
+	// if(padre.dato) {
+	// 	printf("\nPadre encontrado\n");
+	// 	printf("%d", (*(int *)(padre.dato)));
+	// }
+	// else
+	// 	printf("\nNo encontrado\n");
 	// printf("\n\nArbol equilibrado");
 	// equilibrar(&arbol);
 	// imprimirArbol(arbol);

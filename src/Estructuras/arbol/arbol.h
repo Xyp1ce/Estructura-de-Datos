@@ -31,5 +31,8 @@ void bubbleSort(void **datos, int n);
 void swap_ptr(void **a, void **b);
 void compararArboles(Arbol arbolA, Arbol arbolB, int *estructura, int *datos);
 void buscarPadre(NodoA *raiz, NodoA *padre, void *dato, int(*comparar)(void*,void*));
+NodoA extremoIzq(NodoA *raiz);
+NodoA extremoDch(NodoA *raiz);
+void eliminarNodoA(NodoA *raiz, void((*liberar)(void *)), void *dato, int(*comparar)(void*, void*));
 
 #endif
