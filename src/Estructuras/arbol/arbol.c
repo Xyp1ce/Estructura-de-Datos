@@ -70,9 +70,6 @@ void imprimir_arbol(NodoA *nodo, int nivel, void (*imprimir)(void *))
   }
 }
 
-// void imprimir_arbol(NodoA *nodo, int nivel, void (*imprimir)(void *))
-// }
-
 void imprimirArbol(Arbol arbol)
 {
   imprimir_arbol(arbol.raiz, 0, arbol.imprimir);
@@ -212,9 +209,6 @@ void ordenarRaices(void **ordenar, void **inicio, void **final, int *indice)
   // Derecha
   ordenarRaices(ordenar, inicio + (mitad + 1), final, indice);
 }
-
-// Nota: la liberación recursiva de nodos se realiza por eliminar_NodosA(raiz, liberar)
-// La definición antigua de eliminarArbol(NodoA*) fue removida para evitar duplicados.
 
 void compararArboles(Arbol arbolA, Arbol arbolB, int *estructura, int *datos) {
   // Hacemos una verificacion recursiva bajando por todas las ramas
@@ -411,7 +405,6 @@ NodoA* buscarPadre(NodoA *raiz, void* dato, int(*comparar)(void*,void*)) {
   /* Si la raiz misma contiene el dato, no tiene padre */
   if (comparar(raiz->dato, dato) == 0) return NULL;
 
-  /* Recursión según dirección */
   if (raiz->izq && comparar(dato, raiz->dato) < 0)
     return buscarPadre(raiz->izq, dato, comparar);
   if (raiz->dch && comparar(dato, raiz->dato) > 0)
