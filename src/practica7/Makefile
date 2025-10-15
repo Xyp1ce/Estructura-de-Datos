@@ -1,7 +1,7 @@
 cflags = -Wall -Werror -pedantic -std=c99 -O2
 dflags = -Wall -Werror -pedantic -std=c99 -g
 includes = -I ../src/captura -I ../src/Estructuras/pila -I ../src/Estructuras/arbol
-libs = ../../lib -lCaptura -lArbol -lpila
+libs = ../../lib -lCaptura -lArbol -lnoPila
 source = $(wildcard *.c) 
 output = ../../bin/practica7
 
@@ -16,5 +16,5 @@ rebuild:
 	gcc $(cflags) $(source) -o $(output) $(includes) -L $(libs)
 	@echo "Compilo Exitosamente!!!"
 run:
-	../../bin/practica7
+	../../bin/practica7.exe
 

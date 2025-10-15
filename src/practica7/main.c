@@ -9,9 +9,15 @@
 void imprimirCadena(void *a);
 void imprimirCaracter(void *a);
 void liberarCadena(void *a);
+int valido();
 
 int main(void) {
-
+  while(!valido()) {
+    printf("La cadena no es correcta\n");
+    printf("Por favor infresa otra\n");
+  }
+  printf("La cadena es correcta\n");
+  
   return 0;
 }
 
@@ -19,7 +25,7 @@ int valido() {
   Pila pilaC = {NULL,-1,0,&imprimirCaracter,&liberarCadena};
   int esCorrecto = 1;
   char *cadena = NULL;
-  char *c = NULL;
+  int cerrado = 1;
 
   /* Verificar si los parentesis, corchetes o llaves
         * se cierran correctamente. Ejemplo: 
@@ -31,40 +37,44 @@ int valido() {
   inputCadenaDinamica("Ingresa una cadena>> ", &cadena, 255);
 
   for(int i = 0; cadena[i] != '\0' ; i++){
+    cerrado = 1;
     // Si hay un caracter de apertura ( [ { hacemos push de ese caracter
     if(cadena[i] == '(' || cadena[i] == '{' || cadena[i] == '['){
-      char *c = malloc(sizeof(char));
-      *c = cadena[i];
-      push(&pilaC, c);
+      char *tmp = malloc(sizeof(char));
+      *tmp = cadena[i];
+      push(&pilaC, tmp);
     }
 
     if(cadena[i] == ')' || cadena[i] == '}' || cadena[i] == ']'){
-      c = (char*)pop(&pilaC);
+      char *popped = (char*)pop(&pilaC);
 
-      if(!c){ // underflow
+      if(!popped){ // underflow
+        cerrado = 0;
         esCorrecto = 0;
         break;
       }
 
       char a = cadena[i]; // caracter de cierre 
-      char b = *c; // caracter de apertura 
+      char b = *popped; // caracter de apertura 
+      free(popped); // liberar inmediatamente el elemento desempilado
 
       if((b == '(' && a == ')') || (b == '[' && a == ']') || (b == '{' && a == '}')){
         continue;
       } else {
+        cerrado = 0;
         esCorrecto = 0;
         break;
       }
     }
   }
 
-  if(esCorrecto && vacia(pilaC)){
-    return esCorrecto;
-  } else {
-    printf("\nLa cadena no esta bien :(\n");
-  }
+  int estaVacia = vacia(pilaC);
+  free(cadena);
   eliminarPila(&pilaC);
-  return esCorrecto;
+
+  // La cadena es válida solo si no se detectó error durante el recorrido,
+  // la pila quedó vacía (no hay aperturas sin cerrar) y el último cierre fue correcto.
+  return (esCorrecto && estaVacia && cerrado);
 }
 
 void imprimirCadena(void *a){
