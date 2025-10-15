@@ -2,9 +2,9 @@
 #define NODOARBOL_H
 #include <stdlib.h>
 
-typedef struct nodo {
-  struct nodo *izq;
-  struct nodo *dch;
+typedef struct nodoArbol {
+  struct nodoArbol *izq;
+  struct nodoArbol *dch;
   void *dato;
 }NodoA;
 
