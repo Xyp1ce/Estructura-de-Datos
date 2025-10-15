@@ -29,12 +29,6 @@ int main(void)
 	arbolB.comparar = &compararEntero;
 	arbolB.liberar = free;
 
-	// arbolA.raiz = NULL;
-	// arbolA.cantidad = 0;
-	// arbolA.imprimir = &imprimirEntero;
-	// arbolA.comparar = &compararEntero;
-	// arbolA.liberar = free;
-
 	// menú interactivo
 	int opcion = 0;
 	while (opcion != 9) {
@@ -44,9 +38,9 @@ int main(void)
 		printf("3. Comparar Arboles\n");
 		printf("4. Eliminar dato en arbol A\n");
 		printf("5. Eliminar dato en arbol B\n");
-		printf("6. Ver profundidades (altura)\n");
-		printf("7. Equilibrar arboles (si factor fuera de [-1,1])\n");
-		printf("8. Mostrar arboles (A y B)\n");
+		printf("6. Ver profundidades\n");
+		printf("7. Equilibrar arboles\n");
+		printf("8. Mostrar arboles\n");
 		printf("9. Terminar programa\n");
 		printf("Seleccione una opcion: ");
 		if (scanf("%d", &opcion) != 1) { 
@@ -76,8 +70,8 @@ int main(void)
 				int estructura = 1, datos = 1;
 				compararArboles(arbol, arbolB, &estructura, &datos);
 				printf("Resultado comparacion:\n");
-				printf("  Estructura igual: %s\n", estructura?"SI":"NO");
-				printf("  Datos iguales: %s\n", datos?"SI":"NO");
+				printf("Estructura igual: %s\n", estructura?"SI":"NO");
+				printf("Datos iguales: %s\n", (datos==1)?"SI":"NO");
 				break;
 			}
 			case 4:
@@ -92,7 +86,7 @@ int main(void)
 					eliminarNodoA(&arbol, arbol.liberar, &val, arbol.comparar);
 				else 
 					eliminarNodoA(&arbolB, arbolB.liberar, &val, arbolB.comparar);
-				printf("Solicitud de eliminacion de %d en arbol %c procesada\n", val, (opcion==4)?'A':'B');
+				printf("Eliminacion de %d en arbol %c completada\n", val, (opcion==4)?'A':'B');
 				break;
 			}
 			case 6: {
@@ -106,7 +100,8 @@ int main(void)
 				int leftA = 0, rightA = 0, leftB = 0, rightB = 0;
 				if (arbol.raiz) { 
 					Arbol t = { arbol.raiz->izq, 0, arbol.imprimir, arbol.comparar, arbol.liberar }; 
-					leftA = altura(t); Arbol t2 = { arbol.raiz->dch, 0, arbol.imprimir, arbol.comparar, arbol.liberar }; 
+					leftA = altura(t); 
+          Arbol t2 = { arbol.raiz->dch, 0, arbol.imprimir, arbol.comparar, arbol.liberar }; 
 					rightA = altura(t2); 
 				}
 				if (arbolB.raiz) { 

@@ -237,10 +237,23 @@ void compararArboles(Arbol arbolA, Arbol arbolB, int *estructura, int *datos) {
   // Ordenamos ambos arreglos menor a mayor
   bubbleSort(datosArbolA, arbolA.cantidad);
   bubbleSort(datosArbolB, arbolB.cantidad);
-  for(int i = 0; i < arbolA.cantidad; i++) {
-    // Cuando los datos
-    if(datosArbolA[i] != datosArbolB[i]) *datos = 0;
+  for(int i = 0; i < arbolA.cantidad; i++)
+    printf("%d ", (*((int*)(datosArbolA[i]))));
+  printf("\n");
+  for(int j = 0; j < arbolB.cantidad; j++)
+    printf("%d ", (*((int*)(datosArbolB[j]))));
+  printf("\n");
+  for(int k = 0; k < arbolB.cantidad; k++) {
+    int *a = (int*)(datosArbolA[k]);
+    int *b = (int*)(datosArbolB[k]);
+    if(*a != *b) {
+      printf("%d != %d? %c\n", *a, *b, (*a!=*b)?'S':'N');
+      *datos = 0;
+
+    }
   }
+  free(datosArbolA);
+  free(datosArbolB);
 }
 
 void compararRaices(NodoA *raizA, NodoA *raizB, int *comparar) {
