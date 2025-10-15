@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <stdarg.h>
+#include <time.h>
 #include "../captura/captura.h"
 #include "../Estructuras/arbol/arbol.h"
 
@@ -26,12 +28,6 @@ int main(void)
 	arbolB.imprimir = &imprimirEntero;
 	arbolB.comparar = &compararEntero;
 	arbolB.liberar = free;
-
-	// arbolA.raiz = NULL;
-	// arbolA.cantidad = 0;
-	// arbolA.imprimir = &imprimirEntero;
-	// arbolA.comparar = &compararEntero;
-	// arbolA.liberar = free;
 
 	// menú interactivo
 	int opcion = 0;
@@ -75,7 +71,7 @@ int main(void)
 				compararArboles(arbol, arbolB, &estructura, &datos);
 				printf("Resultado comparacion:\n");
 				printf("Estructura igual: %s\n", estructura?"SI":"NO");
-				printf("Datos iguales: %s\n", datos?"SI":"NO");
+				printf("Datos iguales: %s\n", (datos==1)?"SI":"NO");
 				break;
 			}
 			case 4:
