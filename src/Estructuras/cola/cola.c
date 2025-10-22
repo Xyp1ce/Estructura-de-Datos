@@ -80,20 +80,14 @@ void eliminarCola(Cola *cola) {
 }
 
 void* buscarC(Cola cola,void *dato,int (*comparar)(void*,void*)) {
-  Cola aux = (Cola){NULL,NULL,cola.capacidad,0,NULL,NULL};
   void *encontrado = NULL;
-  while(!vaciaC(cola)){
-    if(comparar(cola.inicio->dato, dato) == 0){
-      encontrado = cola.inicio->dato;
-      break;
-    } else {
-      enqueue(&aux, dequeue(&cola));
+  for(int i = 0; i < cola.cantidad; i++) {
+    if(comparar(dato, peekC(cola)) == 0) {
+      encontrado = peekC(cola);
     }
+    enqueue_nodo(&cola, dequeue_nodo(&cola));
   }
-  while(!vaciaC(aux)){
-    enqueue(&cola,dequeue(&aux));
-  }
-	return encontrado;
+  return encontrado;
 }
 
 void enqueue_nodo(Cola *cola ,Nodo *nuevo) {

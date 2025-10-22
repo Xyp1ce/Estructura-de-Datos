@@ -418,7 +418,6 @@ NodoA* buscarPadre(NodoA *raiz, void* dato, int(*comparar)(void*,void*)) {
   /* Si la raiz misma contiene el dato, no tiene padre */
   if (comparar(raiz->dato, dato) == 0) return NULL;
 
-  /* Recursión según dirección */
   if (raiz->izq && comparar(dato, raiz->dato) < 0)
     return buscarPadre(raiz->izq, dato, comparar);
   if (raiz->dch && comparar(dato, raiz->dato) > 0)
