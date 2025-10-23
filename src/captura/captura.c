@@ -5,7 +5,6 @@ void clear_buffer(void)
 	char c;
 	while( (c = getchar()) != '\n' && c !=EOF);
 }
-
 void remover_salto(char *cadena)
 {
 	int i = -1;

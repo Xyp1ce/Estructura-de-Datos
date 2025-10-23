@@ -17,4 +17,4 @@ rebuild:
 	gcc $(cflags) $(source) -o $(output) $(includes) -L $(libs)
 	@echo "Compilo Exitosamente!!! :D"
 run:
-	../../bin/practica8
+	../../bin/practica8.exe
