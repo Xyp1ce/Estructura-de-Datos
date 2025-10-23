@@ -122,5 +122,6 @@ void eliminarPila(Pila *pila)
 }
 
 void* peek(Pila pila){
-  return pila.cima->dato;
+	if(pila.cima == NULL) return NULL;
+	return pila.cima->dato;
 }

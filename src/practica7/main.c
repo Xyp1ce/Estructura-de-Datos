@@ -5,13 +5,168 @@
 #include "../Estructuras/pila/pila.h"
 #include "../captura/captura.h"
 #include "../Estructuras/arbol/arbol.h"
+// Implementaciones locales de validacion y conversión (antes en Estructuras/expr)
+
+void liberarCadena(void *a){
+  char *aa = a;
+  free(aa);
+}
+
+int esApertura(char c){
+  return c == '(' || c == '[' || c == '{';
+}
+
+int esCierre(char c){
+  return c == ')' || c == ']' || c == '}';
+}
+
+int haceMatch(char apertura, char cierre){
+  return (apertura == '(' && cierre == ')') ||
+     (apertura == '[' && cierre == ']') ||
+     (apertura == '{' && cierre == '}');
+}
+
+int esRightAssoc(char c){
+  return c == '^';
+}
+
+int validarParentesis(char *cadena)
+{
+  Pila pila = {NULL, -1, 0, NULL, &liberarCadena};
+  int bandera = 1;
+
+  for (int i = 0; cadena[i] != '\0'; i++)
+  {
+    if (cadena[i] == '(' || cadena[i] == '{' || cadena[i] == '[')
+    {
+      char *tmp = malloc(sizeof(char));
+      *tmp = cadena[i];
+      push(&pila, tmp);
+    }
+
+    else if (cadena[i] == ')' || cadena[i] == '}' || cadena[i] == ']')
+    {
+      if (pila.cantidad == 0)
+      {
+        bandera = 0;
+        break;
+      }
+
+      char *parentesis = pop(&pila);
+
+      if ((cadena[i] == ')' && *parentesis != '(') ||
+        (cadena[i] == '}' && *parentesis != '{') ||
+        (cadena[i] == ']' && *parentesis != '['))
+      {
+        bandera = 0;
+        if (parentesis) free(parentesis);
+        break;
+      }
+      if (parentesis) free(parentesis);
+    }
+  }
+  int empty = vacia(pila);
+  eliminarPila(&pila);
+  if (bandera == 1 && empty)
+  {
+    printf("\n Expresion valida, comenzamos con el proceso.\n");
+    return 1;
+  }
+  else
+  {
+    printf("\n Expresion Invalida.\n");
+    return 0;
+  }
+}
+
+char *inFixtoPostfix(char *expresion)
+{
+  if (!validarParentesis(expresion))
+    return NULL;
+
+  Pila pila = {NULL, -1, 0, NULL, &liberarCadena};
+  int len = strlen(expresion);
+  char *postfix = calloc(len + 1, sizeof(char));
+  int j = 0;
+
+  for (int i = 0; expresion[i] != '\0'; i++)
+  {
+    char c = expresion[i];
+
+    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+    {
+      postfix[j++] = c;
+    }
+    else if (esApertura(c))
+    {
+      char *parentesis = malloc(sizeof(char));
+      *parentesis = c;
+      push(&pila, parentesis);
+    }
+    else if (esCierre(c))
+    {
+      char *op = pop(&pila);
+      while (op != NULL && !haceMatch(*op, c))
+      {
+        postfix[j++] = *op;
+        free(op);
+        op = pop(&pila);
+      }
+      if (op)
+        free(op);
+    }
+    else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^')
+    {
+      while (!vacia(pila))
+      {
+        char *tope = (char *)pila.cima->dato;
+        if (!tope)
+          break;
+        char top = *tope;
+        if (top == '(' || top == '[' || top == '{')
+          break;
+        int top_prec = (top == '+'||top=='-')?1: (top=='*'||top=='/')?2:3;
+        int cur_prec = (c == '+'||c=='-')?1: (c=='*'||c=='/')?2:3;
+        if (top_prec > cur_prec || (top_prec == cur_prec && !esRightAssoc(c)))
+        {
+          char *op = pop(&pila);
+          postfix[j++] = *op;
+          free(op);
+        }
+        else
+          break;
+      }
+
+      char *oper = malloc(sizeof(char));
+      *oper = c;
+      push(&pila, oper);
+    }
+  }
+
+  while (!vacia(pila))
+  {
+    char *op = pop(&pila);
+    if (!op)
+      continue;
+    if (*op == '(' || *op == '[' || *op == '{')
+    {
+      free(op);
+      continue;
+    }
+    postfix[j++] = *op;
+    free(op);
+  }
+
+  postfix[j] = '\0';
+  return postfix;
+}
 
 void imprimirCadena(void *a);
 void imprimirCaracter(void *a);
 void liberarCadena(void *a);
 int valido(char* cadena);
 int precedencia(char c);
-void postfix(char* infix, Pila *postfixPila);
+// usamos inFixtoPostfix de src/Estructuras/expr
 int esApertura(char c);
 int esCierre(char c);
 int haceMatch(char apertura, char cierre);
@@ -19,18 +174,17 @@ int esRightAssoc(char c);
 
 int main(void) {
   char *cadena = NULL;
-  Pila postfixPila = {NULL,-1,0,&imprimirCaracter,&liberarCadena};
   inputCadenaDinamica("Ingresa una cadena>> ", &cadena, 255);
   while(!valido(cadena)) {
     printf("La cadena no es correcta\n");
   inputCadenaDinamica("Ingresa una cadena>> ", &cadena, 255);
   }
   printf("La cadena es correcta\n");
-  postfix(cadena, &postfixPila);
-  // imprime la cadena en postfix
-  imprimirPila(postfixPila);
-  printf("\n");
-  eliminarPila(&postfixPila);
+  char *post = inFixtoPostfix(cadena);
+  if(post){
+    printf("\n Expresion Postfix: %s\n", post);
+    free(post);
+  }
   free(cadena);
 
   return 0;
@@ -100,100 +254,7 @@ void imprimirCaracter(void *a){
   printf("%c",*aa);
 }
 
-void liberarCadena(void *a){
-  char *aa = a;
-  free(aa);
-}
-
-void postfix(char* infix, Pila *postfixPila) {
-  Pila pila = {NULL,-1,0,&imprimirCaracter,&liberarCadena};
-  for(int i = 0; infix[i] != '\0'; i++) {
-    char c = infix[i];
-
-    // Si el caracter es un operando, añadirlo al output
-    if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
-      char *tmp = malloc(sizeof(char));
-      *tmp = c;
-      push(postfixPila, tmp);
-    }
-    // Si el caracter es '(', hacer push a la pila
-    else if(esApertura(c)) {
-      char *tmp = malloc(sizeof(char));
-      *tmp = c;
-      push(&pila, tmp);
-    }
-    else if(esCierre(c)) {
-      // Hacer pop de la pila hasta encontrar el paréntesis de apertura correspondiente
-      char *top = (char*)pop(&pila);
-      while(top != NULL && !haceMatch(*top, c)) {
-        // si top es una apertura distinta, entonces hubo mismatch pero valido() ya lo verificó
-        // mover operadores intermedios al output
-        push(postfixPila, top); // transferir ownership a postfixPila
-        top = (char*)pop(&pila);
-      }
-      // top puede ser NULL (no matching) o la apertura correspondiente
-      if(top) {
-        // descartamos la apertura (no debe ir a la salida)
-        free(top);
-      }
-    }
-    // Si el caracter es un operador
-    else {
-      while(!vacia(pila)) {
-        char *topPtr = (char*)pila.cima->dato;
-        if(!topPtr) break;
-        char top = *topPtr;
-        int top_prec = precedencia(top); // top
-        int cur_prec = precedencia(c); // current
-        // pop mientras top tenga mayor precedencia o igual precedencia y current sea left-assoc
-        if(top == '(' || top == '[' || top == '{') break;
-        if( (top_prec < cur_prec) || (top_prec == cur_prec && !esRightAssoc(c)) ) {
-          // pop desde pila y push a postfixPila
-          char *moved = (char*)pop(&pila);
-          if(moved) push(postfixPila, moved); // ownership transferred
-          else break;
-        } else {
-          break;
-        }
-      }
-      char *tmp = malloc(sizeof(char));
-      *tmp = c;
-      push(&pila, tmp);
-    }
-  }
-
-  // Hacer pop de todos los operadores restantes en la pila
-  while(!vacia(pila)) {
-    char *top = (char*)pop(&pila);
-    if(!top) continue;
-    // no incluir paréntesis de apertura en la salida
-    if(*top == '(' || *top == '[' || *top == '{') {
-      free(top);
-      continue;
-    }
-    push(postfixPila, top); 
-  }
-
-  eliminarPila(&pila);
-}
-
-int esApertura(char c){
-  return c == '(' || c == '[' || c == '{';
-}
-
-int esCierre(char c){
-  return c == ')' || c == ']' || c == '}';
-}
-
-int haceMatch(char apertura, char cierre){
-  return (apertura == '(' && cierre == ')') ||
-         (apertura == '[' && cierre == ']') ||
-         (apertura == '{' && cierre == '}');
-}
-
-int esRightAssoc(char c){
-  return c == '^';
-}
+// usamos las implementaciones compartidas en src/Estructuras/expr
 
 int precedencia(char c) {
   switch (c)
