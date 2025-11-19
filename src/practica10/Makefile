@@ -9,11 +9,12 @@ build :
 	gcc $(cflags) $(source) -o $(output) $(includes) -L $(libs)
 	@echo "Compilo Exitosamente!!!"
 rebuild:
-	make -C ..\captura
-	make -C ..\Estructuras\hash
-	make -C ..\Estructuras\arbol 
-	make -C ..\Estructuras\nodos
+	make -C ../captura
+	make -C ../Estructuras/cola
+	make -C ../Estructuras/hash
+	make -C ../Estructuras/arbol
+	make -C ../Estructuras/nodos
 	gcc $(cflags) $(source) -o $(output) $(includes) -L $(libs)
 	@echo "Compilo Exitosamente!!!"
 run:
-	..\..\bin\practica10.exe
+	../../bin/practica10
