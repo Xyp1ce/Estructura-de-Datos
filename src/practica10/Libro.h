@@ -20,5 +20,10 @@ typedef struct
 
 Libro* obtener_libros(void);
 void imprimirLibro(void* vlibro);
-
+int compararLibro(void* a, void* b);
+int compararISBN(void *a, void *b);
+int compararTitulo(void *a, void *b);
+int compararAutor(void *a, void *b);
+int compararFecha(void *a, void *b);
+int minuscula(int c);
 #endif

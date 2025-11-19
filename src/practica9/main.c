@@ -33,19 +33,16 @@ int main(void) {
 	Heap heap = inicializarHeap(&imprimirArchivo, &compararArchivo); // SE INICIALIZA MIN POR DEFAULT
 	char *nombres[] =
 	{
-		"El principito",
-		"El soldadito de plomo",
-		"The Way of kings",
-		"El imperio final",
-		"Padre rico padre pobre",
-		"La divina comedia",
-		"Don Quijote de la Mancha",
-    "Fisica Univesitaria",
-    "Berserk",
-    "La Biblia"
+		"Acta de matrimonio",
+		"Acta de nacimiento",
+		"CURP",
+		"Declaracion de impuestos",
+		"Codigos del GTA San Andreas",
+		"Archivos del Pentagono",
+		"Script filtrado de GTA VI"
 	};
-	int paginas[] = {100, 16, 1200, 673, 320, 500, 1500, 760, 456, 1600};
-	int cant = 10;
+	int paginas[] = {11, 15, 12, 16, 17, 14, 13};
+	int cant = 7;
 	
 	for (int i = 0; i < cant; i++)
 	{
@@ -70,52 +67,52 @@ int main(void) {
 		printf("\n");
 
 		switch (opcion) {
-      case 0: // Cambiar prioridad
-        cambioPrioridad(&heap);
-        break;
-      case 1: // Mostrar cola de impresion
-        mostrarColaImpresion(heap);
-        break;
-      case 2: // Agregar archivo
-        agregarArchivo(&heap);
-        break;
-      case 3: // Procesar/imprimir archivo
-        procesarArchivo(&heap);
-        break;
-      case 4: // Eliminar archivo
-        if (heap.cantidad == 0) {
-          printf("\n La cola de impresion esta vacia\n");
-          break;
-        }
-        printf("\n");
-        imprimirHeap(heap);
-        printf("\n");
+		case 0: // Cambiar prioridad
+			cambioPrioridad(&heap);
+			break;
+		case 1: // Mostrar cola de impresion
+			mostrarColaImpresion(heap);
+			break;
+		case 2: // Agregar archivo
+			agregarArchivo(&heap);
+			break;
+		case 3: // Procesar/imprimir archivo
+			procesarArchivo(&heap);
+			break;
+		case 4: // Eliminar archivo
+			if (heap.cantidad == 0) {
+				printf("\n La cola de impresion esta vacia\n");
+				break;
+			}
+			printf("\n");
+			imprimirHeap(heap);
+			printf("\n");
 
-        char *nombreArchivoEliminar = NULL;
-        inputCadenaDinamica("\n Ingrese el nombre del archivo a eliminar: ", &nombreArchivoEliminar, 100);
+			char *nombreArchivoEliminar = NULL;
+			inputCadenaDinamica("\n Ingrese el nombre del archivo a eliminar: ", &nombreArchivoEliminar, 100);
 
-        eliminarArchivoHeap(nombreArchivoEliminar, &heap);
+			eliminarArchivoHeap(nombreArchivoEliminar, &heap);
 
-        free(nombreArchivoEliminar);
-        break;
-      case 5: // Eliminar todos los archivos
-        limpiarColaImpresion(&heap);
-        break;
-      case 6: // Terminar programa
-        // Liberar memoria restante
-        while (heap.cantidad) {
-          Archivo *archivo = (Archivo *)quitarHeap(&heap);
-          if (archivo) {
-            free(archivo->nombre);
-            free(archivo);
-          }
-        }
-        printf("\n FIN DEL PROGRAMA\n\n");
-        break;
-      default:
-        printf("\n Ingrese de nuevo");
-    }
-  } while (opcion != 6);
+			free(nombreArchivoEliminar);
+			break;
+		case 5: // Eliminar todos los archivos
+			limpiarColaImpresion(&heap);
+			break;
+		case 6: // Terminar programa
+			// Liberar memoria restante
+			while (heap.cantidad) {
+				Archivo *archivo = (Archivo *)quitarHeap(&heap);
+				if (archivo) {
+					free(archivo->nombre);
+					free(archivo);
+				}
+			}
+			printf("\n FIN DEL PROGRAMA\n\n");
+			break;
+		default:
+			printf("\n Ingrese de nuevo");
+		}
+	} while (opcion != 6);
 	return 0;
 }
 
@@ -146,8 +143,7 @@ void eliminarArchivoHeap(char *nombre, Heap *heap) {
 		Archivo *check = (Archivo*) heap->arr[i]->dato;
 		if (strcmp(check->nombre, nombre) == 0) {
 			posicion = i;
-			break; 
-    }
+			break; }
 	}
 	
 	if (posicion == -1) {
@@ -181,17 +177,18 @@ void eliminarArchivoHeap(char *nombre, Heap *heap) {
 void mostrarEstado(Heap heap) {
 	// Si hay mas de 5 archivos, mostrar solo los primeros 5
 	if (heap.cantidad > 5) {
-		printf("\nHeap %s:\n\n",(heap.tipo == MIN) ? "MINIMO": "MAXIMO");
+		printf("\n Primeros 5 archivos (de %d) del Heap (tipo %s):\n\n", heap.cantidad, (heap.tipo == MIN) ? "MINIMO": "MAXIMO");
 		for (int i = 0; i < 5; i++) {
 			heap.imprimir(heap.arr[i]->dato);
-      printf("\n");
+			if (i < 4)
+				printf(" -> ");
 		}
 	} else {
 		printf("\n Archivos del Heap (tipo %s):\n\n", (heap.tipo == MIN) ? "MINIMO": "MAXIMO");
 		for (int i = 0; i < heap.cantidad; i++) {
 			heap.imprimir(heap.arr[i]->dato);
 			if (i < heap.cantidad - 1)
-				printf(" , ");
+				printf(" -> ");
 		}
 	}
 }
@@ -209,7 +206,7 @@ void mostrarColaImpresion(Heap heap) {
 	for(int i = 0; i < heap.cantidad; i++) {
 		heap.imprimir(heap.arr[i]->dato);
 		if (i < (heap.cantidad < 5 ? heap.cantidad : 5) - 1) {
-			 printf(" , ");
+			 printf(" -> ");
 		}
 	}
 	printf("\n\n ARBOL:\n");

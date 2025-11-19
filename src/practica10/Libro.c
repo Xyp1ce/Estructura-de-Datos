@@ -1,18 +1,72 @@
 #include "Libro.h"
+#include <string.h>
 
 void imprimirLibro(void *vlibro)
 {
 	if(!vlibro) return;
 	Libro *libro = vlibro;
     //printf("%-18s | %-41s | %-25s | %d | %s",libro.isbn, libro.titulo,libro.autor,libro.fecha,libro.disponible);
-	printf("%-18s | ",libro->isbn);
-	printf("%-41s | ",libro->titulo);
-	printf("%-25s | ",libro->autor);
+	printf("%s | ",libro->isbn);
+	printf("%s | ",libro->titulo);
+	printf("%s | ",libro->autor);
 	printf("%d | ",libro->fecha);
 	if(libro->disponible)
 		printf("DISPONIBLE");
 	else
 		printf("PRESTADO");
+}
+
+int compararISBN(void *a, void *b){
+    Libro *libroA = a;
+    Libro *libroB = b;
+    int i = 0;
+    while (libroA->isbn[i] != '\0' && libroB->isbn[i] != '\0') {
+        int ca = minuscula((int)libroA->isbn[i]);
+        int cb = minuscula((int)libroB->isbn[i]);
+        if (ca != cb) 
+            return ca - cb;
+        i++;
+    }
+    return minuscula((int)libroA->isbn[i]) - minuscula((int)libroB->isbn[i]);
+}
+
+int compararTitulo(void *a, void *b){
+    Libro *libroA = a;
+    Libro *libroB = b;
+    int i = 0;
+    while (libroA->titulo[i] != '\0' && libroB->titulo[i] != '\0') {
+        int ca = minuscula((int)libroA->titulo[i]);
+        int cb = minuscula((int)libroB->titulo[i]);
+        if (ca != cb) 
+            return ca - cb;
+        i++;
+    }
+    return minuscula((int)libroA->titulo[i]) - minuscula((int)libroB->titulo[i]);
+}
+
+int compararAutor(void *a, void *b){
+    Libro *libroA = a;
+    Libro *libroB = b;
+    int i = 0;
+    while (libroA->autor[i] != '\0' && libroB->autor[i] != '\0') {
+        int ca = minuscula((int)libroA->autor[i]);
+        int cb = minuscula((int)libroB->autor[i]);
+        if (ca != cb) 
+            return ca - cb;
+        i++;
+    }
+    return minuscula((int)libroA->autor[i]) - minuscula((int)libroB->autor[i]);
+}
+
+int compararFecha(void *a, void *b){
+    Libro *libroA = a;
+    Libro *libroB = b;
+    if (libroA->fecha == libroB->fecha) 
+        return 0;
+    if (libroA->fecha > libroB->fecha) 
+        return 1;
+    else
+        return -1;
 }
 
 Libro* obtener_libros(void)
