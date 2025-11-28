@@ -7,13 +7,14 @@ void imprimirLibro(void *vlibro)
 	Libro *libro = vlibro;
     //printf("%-18s | %-41s | %-25s | %d | %s",libro.isbn, libro.titulo,libro.autor,libro.fecha,libro.disponible);
 	printf("%s | ",libro->isbn);
-	printf("%s | ",libro->titulo);
-	printf("%s | ",libro->autor);
+	printf("%-41s | ",libro->titulo);
+	printf("%-25s | ",libro->autor);
 	printf("%d | ",libro->fecha);
 	if(libro->disponible)
 		printf("DISPONIBLE");
 	else
 		printf("PRESTADO");
+  printf("\n");
 }
 
 int compararISBN(void *a, void *b){
